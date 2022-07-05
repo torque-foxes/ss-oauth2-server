@@ -43,7 +43,6 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 
     private static $has_one = [
         'Client' => ClientEntity::class,
-        'Member' => Member::class
     ];
 
     private static $many_many = [
@@ -65,7 +64,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 
     public function getUserIdentifier()
     {
-        return $this->MemberID;
+        return $this->Client()->MemberID;
     }
 
     public function getScopes()
