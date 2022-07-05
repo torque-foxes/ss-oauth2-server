@@ -9,6 +9,7 @@ namespace IanSimpson\OAuth2;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
+use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use function GuzzleHttp\Psr7\stream_for;
 use IanSimpson\OAuth2\Entities\UserEntity;
 use IanSimpson\OAuth2\Repositories\AccessTokenRepository;
@@ -110,6 +111,12 @@ class OauthServerController extends Controller
             new DateInterval('PT1H') // new access tokens will expire after 1 hour
         );
 
+        // Enable Client credentials grant
+        $grant = new ClientCredentialsGrant();
+        $this->server->enableGrantType(
+            $grant,
+            new DateInterval('PT1H') // new access tokens will expire after 1 hour
+        );
         $this->logger = Injector::inst()->get('IanSimpson\\OAuth2\\Logger');
 
         parent::__construct();
@@ -219,8 +226,10 @@ class OauthServerController extends Controller
         );
         $request = ServerRequest::fromGlobals();
         $auth = $request->getHeader('Authorization');
-        if ((!$auth || !sizeof($auth)) && $_SERVER['AUTHORIZATION']) {
-            $request = $request->withAddedHeader('Authorization', $_SERVER['AUTHORIZATION']);
+
+        if (($auth || sizeof($auth)) && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+
+            $request = $request->withAddedHeader('Authorization', $_SERVER['HTTP_AUTHORIZATION']);
         }
 
         try {
@@ -236,10 +245,12 @@ class OauthServerController extends Controller
      */
     public static function getMember($controller)
     {
+
         $request = self::authenticateRequest($controller);
         if (!$request) {
             return false;
         }
+
         $members = Member::get()->filter([
             "ID" => $request->getAttributes()['oauth_user_id']
         ]);
