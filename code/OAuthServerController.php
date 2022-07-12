@@ -9,7 +9,11 @@ namespace IanSimpson\OAuth2;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Psr7\Response;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Dev\Debug;
+use SilverStripe\Security\IdentityStore;
 use function GuzzleHttp\Psr7\stream_for;
 use IanSimpson\OAuth2\Entities\UserEntity;
 use IanSimpson\OAuth2\Repositories\AccessTokenRepository;
@@ -42,11 +46,14 @@ class OauthServerController extends Controller
     private static $allowed_actions = [
         'authorize',
         'accessToken',
+        'validateClientGrant'
     ];
 
     private static $url_handlers = [
         'authorize'         => 'authorize',
         'access_token'      => 'accessToken',
+        'oauth_logon'       => 'logon',
+        'validate'          => 'validateClientGrant'
     ];
 
     protected $server;
@@ -196,6 +203,7 @@ class OauthServerController extends Controller
 
     public function accessToken()
     {
+
         try {
             // Try to respond to the request
             $this->myResponse = $this->server->respondToAccessTokenRequest($this->myRequest, $this->myResponse);
@@ -217,7 +225,7 @@ class OauthServerController extends Controller
      */
     public static function authenticateRequest($controller)
     {
-        $publicKey = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get(self::class, 'publicKey');
+        $publicKey = self::getPublicKey();
 
         //Muting errors with @ to stop notice about key permissions
         $server = @new ResourceServer(
@@ -225,18 +233,19 @@ class OauthServerController extends Controller
             $publicKey
         );
         $request = ServerRequest::fromGlobals();
-        $auth = $request->getHeader('Authorization');
+        $auth = $request->getHeader('HTTP_AUTHORIZATION');
 
         if (($auth || sizeof($auth)) && isset($_SERVER['HTTP_AUTHORIZATION'])) {
-
-            $request = $request->withAddedHeader('Authorization', $_SERVER['HTTP_AUTHORIZATION']);
+            $request = $request->withAddedHeader('HTTP_AUTHORIZATION', $_SERVER['HTTP_AUTHORIZATION']);
         }
 
         try {
-            $request = $server->validateAuthenticatedRequest($request);
+            $request = $server->respondToAccessTokenRequest($request);
+
         } catch (Exception $exception) {
             return false;
         }
+
         return $request;
     }
 
@@ -245,7 +254,6 @@ class OauthServerController extends Controller
      */
     public static function getMember($controller)
     {
-
         $request = self::authenticateRequest($controller);
         if (!$request) {
             return false;
@@ -257,5 +265,75 @@ class OauthServerController extends Controller
         /** @var Member $member */
         $member = $members->first();
         return $member;
+    }
+
+//    /**
+//     * @return bool|Member
+//     */
+//    public function logon()
+//    {
+//        $request = self::authenticateRequest($this);
+//
+//        if (!$request) {
+//           return self::accessToken();
+//        }
+//
+//        // Try to respond to the request
+//        $member = Member::get()->byID($request->getAttributes()['oauth_user_id']);
+//
+//        Injector::inst()->get(IdentityStore::class)->login($member);
+//
+//        return $member;
+//
+//       //return $this->redirect('/admin/dam/');
+//    }
+
+    /**
+     * @return ResourceServer|AuthorizationServer
+     */
+    public function getServer()
+    {
+        return  $this->server;
+    }
+
+    /**
+     * @return ResourceServer|AuthorizationServer
+     */
+    public function setServer($server)
+    {
+        return $this->server = $server;
+    }
+
+    public function validateClientGrant(HTTPRequest $request)
+    {
+        $server = @new ResourceServer(
+            new AccessTokenRepository(),
+            self::getPublicKey()
+        );
+
+        $this->setServer($server);
+        $this->handleRequest($request);
+
+        try {
+            // Try to respond to the request
+            $this->myResponse = $this->server->validateAuthenticatedRequest($this->myRequest);
+
+        } catch (OAuthServerException $exception) {
+            // All instances of OAuthServerException can be formatted into a HTTP response
+            $this->myResponse = $exception->generateHttpResponse($this->myResponse);
+            return $this->myResponseAdapter->fromPsr7($this->myResponse);
+        } catch (Exception $exception) {
+            $this->myResponse = $this->myResponse->withStatus(500)->withBody(
+                stream_for($exception->getMessage())
+            );
+            return $this->myResponseAdapter->fromPsr7($this->myResponse);
+        }
+
+        return true;
+    }
+
+    private static function getPublicKey(): string
+    {
+        return  $publicKey = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get(self::class, 'publicKey');
     }
 }
