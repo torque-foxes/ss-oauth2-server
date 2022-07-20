@@ -18,9 +18,10 @@
         "monolog/monolog": "^1.2",
         "silverstripe/siteconfig": "^4",
         "silverstripe/framework": "^4",
-        "league/oauth2-server": "^7",
+        "league/oauth2-server": "^8.2",
         "guzzlehttp/psr7": "^1.4",
-        "robbie/psr7-adapters": "^1"
+        "robbie/psr7-adapters": "^1",
+        "PHP": ">=7.1 || ^8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
