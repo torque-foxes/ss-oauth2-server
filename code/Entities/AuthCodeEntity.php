@@ -6,7 +6,7 @@
 
 namespace IanSimpson\OAuth2\Entities;
 
-use DateTime;
+use DateTimeImmutable;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -89,7 +89,7 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         $this->Code = $code;
     }
 
-    public function setExpiryDateTime(DateTime $expiry)
+    public function setExpiryDateTime(DateTimeImmutable $expiry)
     {
         $this->Expiry = $expiry->getTimestamp();
     }
