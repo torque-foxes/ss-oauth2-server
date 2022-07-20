@@ -6,7 +6,7 @@
 
 namespace IanSimpson\OAuth2\Entities;
 
-use DateTime;
+use DateTimeImmutable;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -56,7 +56,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 
     public function getExpiryDateTime()
     {
-        $date = new DateTime();
+        $date = new DateTimeImmutable();
         $date->setTimestamp((int) $this->Expiry);
 
         return $date;
@@ -88,7 +88,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         $this->Code = $code;
     }
 
-    public function setExpiryDateTime(DateTime $expiry)
+    public function setExpiryDateTime(DateTimeImmutable $expiry)
     {
         $this->Expiry = $expiry->getTimestamp();
     }
