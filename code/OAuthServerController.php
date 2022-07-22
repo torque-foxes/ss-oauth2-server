@@ -12,6 +12,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Response;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Core\Environment;
 use SilverStripe\Dev\Debug;
 use SilverStripe\Security\IdentityStore;
 use function GuzzleHttp\Psr7\stream_for;
@@ -36,12 +37,13 @@ use SilverStripe\Control\Controller;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 use Silverstripe\Security\Security;
+use Silverstripe\Control\Director;
 
 class OauthServerController extends Controller
 {
-    private static $privateKey = '../private.key';
-    private static $publicKey = '../public.key';
-    private static $encryptionKey = '';
+    private $privateKey;
+    private $publicKey;
+    private $encryptionKey;
 
     private static $allowed_actions = [
         'authorize',
@@ -69,9 +71,21 @@ class OauthServerController extends Controller
      */
     protected $logger;
 
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
-        $privateKey = BASE_PATH . DIRECTORY_SEPARATOR . $this->config()->get('privateKey');
+        $this->privateKey = self::getKey('OAUTH_PRIVATE_KEY_PATH');
+        $this->publicKey = self::getKey('OAUTH_PUBLIC_KEY_PATH');
+
+        if (!$this->privateKey) {
+            throw new Exception('OauthServerController::privateKey must not be empty!');
+        }
+
+        if (!$this->publicKey) {
+            throw new Exception('OauthServerController::publicKey must not be empty!');
+        }
 
         $this->myRepositories = [
             'client'        => new ClientRepository(),
@@ -81,8 +95,8 @@ class OauthServerController extends Controller
             'refreshToken'  => new RefreshTokenRepository(),
         ];
 
-        $encryptionKey = $this->config()->get('encryptionKey');
-        if (empty($encryptionKey)) {
+        $this->encryptionKey = self::getKey('OAUTH_ENCRYPTION_KEY');
+        if (empty($this->encryptionKey)) {
             throw new Exception('OauthServerController::encryptionKey must not be empty!');
         }
 
@@ -91,10 +105,9 @@ class OauthServerController extends Controller
             $this->myRepositories['client'],
             $this->myRepositories['accessToken'],
             $this->myRepositories['scope'],
-            $privateKey,
-            $encryptionKey
+            $this->privateKey,
+            $this->encryptionKey
         );
-
 
         // Enable the authentication code grant on the server
         $grant = new AuthCodeGrant(
@@ -225,7 +238,7 @@ class OauthServerController extends Controller
      */
     public static function authenticateRequest($controller)
     {
-        $publicKey = self::getPublicKey();
+        $publicKey = self::getKey('OAUTH_PUBLIC_KEY_PATH');
 
         //Muting errors with @ to stop notice about key permissions
         $server = @new ResourceServer(
@@ -267,27 +280,6 @@ class OauthServerController extends Controller
         return $member;
     }
 
-//    /**
-//     * @return bool|Member
-//     */
-//    public function logon()
-//    {
-//        $request = self::authenticateRequest($this);
-//
-//        if (!$request) {
-//           return self::accessToken();
-//        }
-//
-//        // Try to respond to the request
-//        $member = Member::get()->byID($request->getAttributes()['oauth_user_id']);
-//
-//        Injector::inst()->get(IdentityStore::class)->login($member);
-//
-//        return $member;
-//
-//       //return $this->redirect('/admin/dam/');
-//    }
-
     /**
      * @return ResourceServer|AuthorizationServer
      */
@@ -308,7 +300,7 @@ class OauthServerController extends Controller
     {
         $server = @new ResourceServer(
             new AccessTokenRepository(),
-            self::getPublicKey()
+            $this->publicKey
         );
 
         $this->setServer($server);
@@ -332,8 +324,8 @@ class OauthServerController extends Controller
         return true;
     }
 
-    private static function getPublicKey(): string
+    private static function getKey(string $key): string
     {
-        return  $publicKey = BASE_PATH . DIRECTORY_SEPARATOR . Config::inst()->get(self::class, 'publicKey');
+        return Environment::getEnv($key);
     }
 }
