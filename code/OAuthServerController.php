@@ -58,6 +58,11 @@ class OauthServerController extends Controller
         'validate'          => 'validateClientGrant'
     ];
 
+    /**
+     * @var string default is 1 hour
+     */
+    public static $grant_expiry_interval = 'PT1H';
+
     protected $server;
     protected $myRequest;
     protected $myResponse;
@@ -70,6 +75,11 @@ class OauthServerController extends Controller
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
+
+    public static function getGrantTypeExpiryInterval(): string
+    {
+        return self::config()->grant_expiry_interval ?? self::$grant_expiry_interval;
+    }
 
     /**
      * @throws Exception
@@ -118,7 +128,7 @@ class OauthServerController extends Controller
         $grant->setRefreshTokenTTL(new DateInterval('P1M')); // refresh tokens will expire after 1 month
         $this->server->enableGrantType(
             $grant,
-            new DateInterval('PT1H') // access tokens will expire after 1 hour
+            new DateInterval($this->getGrantTypeExpiryInterval())
         );
 
         // Enable the refresh code grant on the server
@@ -128,14 +138,14 @@ class OauthServerController extends Controller
         $grant->setRefreshTokenTTL(new DateInterval('P1M')); // new refresh tokens will expire after 1 month
         $this->server->enableGrantType(
             $grant,
-            new DateInterval('PT1H') // new access tokens will expire after 1 hour
+            new DateInterval($this->getGrantTypeExpiryInterval())
         );
 
         // Enable Client credentials grant
         $grant = new ClientCredentialsGrant();
         $this->server->enableGrantType(
             $grant,
-            new DateInterval('PT1H') // new access tokens will expire after 1 hour
+            new DateInterval($this->getGrantTypeExpiryInterval())
         );
         $this->logger = Injector::inst()->get('IanSimpson\\OAuth2\\Logger');
 
@@ -216,7 +226,6 @@ class OauthServerController extends Controller
 
     public function accessToken()
     {
-
         try {
             // Try to respond to the request
             $this->myResponse = $this->server->respondToAccessTokenRequest($this->myRequest, $this->myResponse);

@@ -6,7 +6,9 @@
 
 namespace IanSimpson\OAuth2\Entities;
 
+use DateInterval;
 use DateTimeImmutable;
+use IanSimpson\OAuth2\OauthServerController;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -58,6 +60,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
     {
         $date = new DateTimeImmutable();
         $date->setTimestamp((int) $this->Expiry);
+        $date = $date->add(new DateInterval(OauthServerController::getGrantTypeExpiryInterval()));
 
         return $date;
     }

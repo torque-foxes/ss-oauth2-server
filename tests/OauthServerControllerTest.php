@@ -2,6 +2,7 @@
 
 namespace IanSimpson\Tests;
 
+use SilverStripe\Core\Kernel;
 use function GuzzleHttp\Psr7\parse_query;
 use IanSimpson\OAuth2\Entities\AccessTokenEntity;
 use IanSimpson\OAuth2\Entities\AuthCodeEntity;
@@ -166,6 +167,13 @@ class OauthServerControllerTest extends FunctionalTest
         $this->assertEquals($request->getAttribute('oauth_client_id'), $c->ClientIdentifier);
         $this->assertEquals($request->getAttribute('oauth_user_id'), $m->ID);
         $this->assertEquals($request->getAttribute('oauth_scopes'), []);
+    }
+
+    public function testGetGrantTypeExpiryInterval(): void
+    {
+        $oauthController = OauthServerController::singleton();
+        $oauthController->config()->update('grant_expiry_interval', 'PT1H');
+        $this->assertEquals('PT1H', $oauthController::getGrantTypeExpiryInterval());
     }
 
     private function tokenIsOk($jwt)
