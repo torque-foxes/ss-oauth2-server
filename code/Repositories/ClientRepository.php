@@ -14,19 +14,21 @@ class ClientRepository implements ClientRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
+    public function getClientEntity($clientIdentifier)
     {
         $clients = ClientEntity::get()->filter([
             'ClientIdentifier' => $clientIdentifier,
         ]);
 
+
         // Check if client is registered
-        if (!sizeof($clients)) {
+        if (!$clients->exists()) {
             return null;
         }
 
         /** @var ClientEntity $client */
         $client = $clients->first();
+        $client->setConfidential();
 
         if ($mustValidateSecret === true
             && !$client->isSecretValid($clientSecret)
@@ -42,6 +44,14 @@ class ClientRepository implements ClientRepositoryInterface
      */
     public function validateClient($clientIdentifier, $clientSecret, $grantType)
     {
+        $client = $this->getClientEntity($clientIdentifier);
+
+        if ($client->ClientConfidential === true
+            && \password_verify($clientSecret, $client->ClientSecret) === false
+        ) {
+            return false;
+        }
+
         return true;
     }
 }

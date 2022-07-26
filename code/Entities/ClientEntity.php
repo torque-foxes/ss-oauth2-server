@@ -8,6 +8,8 @@ namespace IanSimpson\OAuth2\Entities;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use SilverStripe\Forms\ReadonlyField;
+use League\OAuth2\Server\Entities\Traits\ClientTrait;
+use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
@@ -24,12 +26,14 @@ use SilverStripe\SiteConfig\SiteConfig;
  * @property string ClientSecretHashMethod
  * @property string ClientSecretHashIterations
  * @property string ClientSecretSalt
+ * @property bool ClientConfidential
  * @method SiteConfig SiteConfig()
  *
  */
 class ClientEntity extends DataObject implements ClientEntityInterface
 {
     private static $hash_method = 'sha512';
+    use ClientTrait, EntityTrait;
 
     private static $hash_iterations = 20000;
 
@@ -48,6 +52,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         'ClientSecretHashMethod' => 'Varchar(50)',
         'ClientSecretHashIterations' => 'Varchar(50)',
         'ClientSecretSalt' => 'Varchar(50)',
+        'ClientConfidential' => 'Enum("true,false", "false")'
     ];
 
     private static $has_one = [
@@ -120,6 +125,9 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         return $result;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function populateDefaults()
     {
         parent::populateDefaults();
