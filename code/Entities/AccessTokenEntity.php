@@ -85,7 +85,6 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $client;
     }
 
-
     public function setIdentifier($code)
     {
         $this->Code = $code;
