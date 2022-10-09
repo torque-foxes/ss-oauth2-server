@@ -32,8 +32,10 @@ use SilverStripe\SiteConfig\SiteConfig;
  */
 class ClientEntity extends DataObject implements ClientEntityInterface
 {
+
+    use ClientTrait;
+
     private static $hash_method = 'sha512';
-    use ClientTrait, EntityTrait;
 
     private static $hash_iterations = 20000;
 
@@ -57,7 +59,6 @@ class ClientEntity extends DataObject implements ClientEntityInterface
 
     private static $has_one = [
         'SiteConfig' => SiteConfig::class,
-        'Member' => Member::class
     ];
 
     private static $summary_fields = [
@@ -108,6 +109,10 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         return $fields;
     }
 
+    /**
+     * @inheritDoc
+     * @return ValidationResult
+     */
     public function validate()
     {
         $result = ValidationResult::create();
@@ -154,7 +159,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
             $this->storeSafely($this->ClientSecret);
             $this->ClientSecret = '';
         }
-        
+
         parent::onBeforeWrite();
     }
 
@@ -171,6 +176,11 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     public function getIdentifier()
     {
         return $this->ClientIdentifier;
+    }
+
+    public function setConfidential()
+    {
+        return $this->isConfidential = $this->ClientConfidential;
     }
 
     public function isSecretValid($secret)
