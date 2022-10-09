@@ -40,8 +40,9 @@ class OauthServerControllerTest extends FunctionalTest
         $encryptionKey = 'abc';
         $this->setEncryptionKey($encryptionKey);
 
-        $relativeKey = str_replace(BASE_PATH . '/', '', __DIR__.'/test.key');
-        $relativeCrt = str_replace(BASE_PATH . '/', '', __DIR__.'/test.crt');
+        $relativeKey = BASE_PATH . '/vendor/iansimpson/ss-oauth2-server/tests/test.key';
+        $relativeCrt = BASE_PATH . '/vendor/iansimpson/ss-oauth2-server/tests/test.crt';
+
         Config::modify()->set(OauthServerController::class, 'encryptionKey', $encryptionKey);
         Config::modify()->set(OauthServerController::class, 'privateKey', $relativeKey);
         Config::modify()->set(OauthServerController::class, 'publicKey', $relativeCrt);
