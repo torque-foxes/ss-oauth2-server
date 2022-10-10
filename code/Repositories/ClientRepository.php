@@ -45,9 +45,9 @@ class ClientRepository implements ClientRepositoryInterface
     public function validateClient($clientIdentifier, $clientSecret, $grantType)
     {
         $client = $this->getClientEntity($clientIdentifier);
-
+        
         if ($client->ClientConfidential === true
-            && \password_verify($clientSecret, $client->ClientSecret) === false
+            && !$client->isSecretValid($clientSecret)
         ) {
             return false;
         }
