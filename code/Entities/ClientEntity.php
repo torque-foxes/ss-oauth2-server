@@ -97,7 +97,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
                 /** @var \FormField $secretField */
                 $secretField = $fields->fieldByName('Root.Main.HashedClientSecret');
                 $secretField->setTitle('Client secret');
-                $secretField->setRightTitle('Please copy this securely to the client. This password will disappear from here forever after save.');
+                $secretField->setDescription('Please copy this securely to the client. This password will disappear from here forever after save.');
             } else {
                 $fields->removeFieldFromTab('Root', 'HashedClientSecret');
                 $secretField = ReadonlyField::create('HiddenHashedClientSecret', 'Client secret')
