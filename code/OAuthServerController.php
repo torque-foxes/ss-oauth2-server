@@ -10,6 +10,7 @@ use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Utils;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Environment;
@@ -110,8 +111,8 @@ class OauthServerController extends Controller
             throw new Exception('OauthServerController::encryptionKey must not be empty!');
         }
 
-        // Muting errors with @ to stop notice about key permissions
-        $this->server = @new AuthorizationServer(
+        // Will fail ungracefully if key(s) permissions are not set to 0600|0660
+        $this->server = new AuthorizationServer(
             $this->myRepositories['client'],
             $this->myRepositories['accessToken'],
             $this->myRepositories['scope'],
@@ -128,7 +129,7 @@ class OauthServerController extends Controller
         $grant->setRefreshTokenTTL(new DateInterval('P1M')); // refresh tokens will expire after 1 month
         $this->server->enableGrantType(
             $grant,
-            new DateInterval($this->getGrantTypeExpiryInterval())
+            new DateInterval(self::getGrantTypeExpiryInterval())
         );
 
         // Enable the refresh code grant on the server
@@ -138,14 +139,14 @@ class OauthServerController extends Controller
         $grant->setRefreshTokenTTL(new DateInterval('P1M')); // new refresh tokens will expire after 1 month
         $this->server->enableGrantType(
             $grant,
-            new DateInterval($this->getGrantTypeExpiryInterval())
+            new DateInterval(self::getGrantTypeExpiryInterval())
         );
 
         // Enable Client credentials grant
         $grant = new ClientCredentialsGrant();
         $this->server->enableGrantType(
             $grant,
-            new DateInterval($this->getGrantTypeExpiryInterval())
+            new DateInterval(self::getGrantTypeExpiryInterval())
         );
         $this->logger = Injector::inst()->get('IanSimpson\\OAuth2\\Logger');
 
@@ -250,7 +251,7 @@ class OauthServerController extends Controller
         $publicKey = self::getKey('OAUTH_PUBLIC_KEY_PATH');
 
         //Muting errors with @ to stop notice about key permissions
-        $server = @new ResourceServer(
+        $server = new ResourceServer(
             new AccessTokenRepository(),
             $publicKey
         );
@@ -277,6 +278,7 @@ class OauthServerController extends Controller
     public static function getMember($controller)
     {
         $request = self::authenticateRequest($controller);
+
         if (!$request) {
             return false;
         }
@@ -284,8 +286,10 @@ class OauthServerController extends Controller
         $members = Member::get()->filter([
             "ID" => $request->getAttributes()['oauth_user_id']
         ]);
+
         /** @var Member $member */
         $member = $members->first();
+
         return $member;
     }
 
@@ -298,16 +302,19 @@ class OauthServerController extends Controller
     }
 
     /**
+     * @param $server ResourceServer|AuthorizationServer
      * @return ResourceServer|AuthorizationServer
      */
     public function setServer($server)
     {
-        return $this->server = $server;
+        $this->server = $server;
+
+        return $this;
     }
 
     public function validateClientGrant(HTTPRequest $request)
     {
-        $server = @new ResourceServer(
+        $server = new ResourceServer(
             new AccessTokenRepository(),
             $this->publicKey
         );
@@ -325,7 +332,7 @@ class OauthServerController extends Controller
             return $this->myResponseAdapter->fromPsr7($this->myResponse);
         } catch (Exception $exception) {
             $this->myResponse = $this->myResponse->withStatus(500)->withBody(
-                stream_for($exception->getMessage())
+                Utils::streamFor($exception->getMessage())
             );
             return $this->myResponseAdapter->fromPsr7($this->myResponse);
         }

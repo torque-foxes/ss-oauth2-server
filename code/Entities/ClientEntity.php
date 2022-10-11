@@ -54,7 +54,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         'ClientSecretHashMethod' => 'Varchar(50)',
         'ClientSecretHashIterations' => 'Varchar(50)',
         'ClientSecretSalt' => 'Varchar(50)',
-        'ClientConfidential' => 'Enum("true,false", "false")'
+        'ClientConfidential' => 'Boolean'
     ];
 
     private static $has_one = [
@@ -180,7 +180,9 @@ class ClientEntity extends DataObject implements ClientEntityInterface
 
     public function setConfidential()
     {
-        return $this->isConfidential = $this->ClientConfidential;
+        $this->isConfidential = $this->ClientConfidential;
+
+        return $this;
     }
 
     public function isSecretValid($secret)

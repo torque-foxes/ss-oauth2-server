@@ -2,6 +2,7 @@
 
 namespace IanSimpson\Tests;
 
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Kernel;
 use function GuzzleHttp\Psr7\parse_query;
 use IanSimpson\OAuth2\Entities\AccessTokenEntity;
@@ -37,18 +38,17 @@ class OauthServerControllerTest extends FunctionalTest
 
         $_SERVER['SERVER_PORT'] = 80;
 
-        $encryptionKey = 'abc';
+        $encryptionKey = 'lxZFUEsBCJ2Yb14IF2ygAHI5N4+ZAUXXaSeeJm6+twsUmIen';
         $this->setEncryptionKey($encryptionKey);
 
-        $relativeKey = BASE_PATH . '/vendor/iansimpson/ss-oauth2-server/tests/test.key';
-        $relativeCrt = BASE_PATH . '/vendor/iansimpson/ss-oauth2-server/tests/test.crt';
+        $publicKey = BASE_PATH . __DIR__. 'public.key';
+        $privateKey = BASE_PATH . __DIR__. 'private.key';
 
-        Config::modify()->set(OauthServerController::class, 'encryptionKey', $encryptionKey);
-        Config::modify()->set(OauthServerController::class, 'privateKey', $relativeKey);
-        Config::modify()->set(OauthServerController::class, 'publicKey', $relativeCrt);
+        Environment::putEnv('OAUTH_PUBLIC_KEY_PATH=' . $publicKey);
+        Environment::putEnv('OAUTH_PRIVATE_KEY_PATH=' . $privateKey);
 
-        chmod(__DIR__ . '/test.key', 0600);
-        chmod(__DIR__ . '/test.crt', 0600);
+        chmod($publicKey, 0600);
+        chmod($privateKey, 0600);
 
         $this->logger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
