@@ -9,14 +9,9 @@ namespace IanSimpson\OAuth2;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Environment;
-use SilverStripe\Dev\Debug;
-use SilverStripe\Security\IdentityStore;
-use function GuzzleHttp\Psr7\stream_for;
 use IanSimpson\OAuth2\Entities\UserEntity;
 use IanSimpson\OAuth2\Repositories\AccessTokenRepository;
 use IanSimpson\OAuth2\Repositories\AuthCodeRepository;
@@ -38,7 +33,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 use Silverstripe\Security\Security;
-use Silverstripe\Control\Director;
 
 class OauthServerController extends Controller
 {
@@ -218,7 +212,7 @@ class OauthServerController extends Controller
             $this->myResponse = $exception->generateHttpResponse($this->myResponse);
         } catch (Exception $exception) {
             $this->myResponse = $this->myResponse->withStatus(500)->withBody(
-                stream_for($exception->getMessage())
+                Utils::streamFor($exception->getMessage())
             );
         }
 
@@ -235,7 +229,7 @@ class OauthServerController extends Controller
             $this->myResponse = $exception->generateHttpResponse($this->myResponse);
         } catch (Exception $exception) {
             $this->myResponse = $this->myResponse->withStatus(500)->withBody(
-                stream_for($exception->getMessage())
+                Utils::streamFor($exception->getMessage())
             );
         }
 
@@ -305,7 +299,7 @@ class OauthServerController extends Controller
      * @param $server ResourceServer|AuthorizationServer
      * @return ResourceServer|AuthorizationServer
      */
-    public function setServer($server)
+    public function setServer($server):self
     {
         $this->server = $server;
 

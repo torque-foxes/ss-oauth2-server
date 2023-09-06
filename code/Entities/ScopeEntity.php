@@ -50,7 +50,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
         ]
     ];
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->ScopeIdentifier;
     }
