@@ -92,7 +92,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
                 ->setValue('<this client secret is insecure - please save client to fix>');
             $fields->insertAfter('ClientIdentifier', $legacySecret);
         } else {
-            if (!$this->ID && !empty(trim($this->HashedClientSecret))) {
+            if (!$this->ID && !empty(trim((string) $this->HashedClientSecret))) {
                 // Must use existing field, otherwise loses the initial value. See note in populateDefaults below.
                 /** @var \FormField $secretField */
                 $secretField = $fields->fieldByName('Root.Main.HashedClientSecret');
@@ -117,13 +117,13 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     {
         $result = ValidationResult::create();
 
-        if (empty(trim($this->ClientIdentifier))) {
+        if (empty(trim((string) $this->ClientIdentifier))) {
             $result->addError('Client identifier must not be empty.');
         }
-        if (empty(trim($this->HashedClientSecret)) && empty(trim($this->ClientSecret))) {
+        if (empty(trim((string) $this->HashedClientSecret)) && empty(trim((string) $this->ClientSecret))) {
             $result->addError('Either client secret hash or client secret must not be empty.');
         }
-        if (empty(trim($this->ClientRedirectUri))) {
+        if (empty(trim((string) $this->ClientRedirectUri))) {
             $result->addError('Client redirect URI must be given.');
         }
 
@@ -150,12 +150,12 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     public function onBeforeWrite()
     {
         // Overwrite the HashedClientSecret property with the hashed value if needed.
-        if (!$this->ID && !empty(trim($this->HashedClientSecret))) {
+        if (!$this->ID && !empty(trim((string) $this->HashedClientSecret))) {
             $this->storeSafely($this->HashedClientSecret);
         }
 
         // Automatically fix historical unhashed tokens.
-        if (!empty(trim($this->ClientSecret))) {
+        if (!empty(trim((string) $this->ClientSecret))) {
             $this->storeSafely($this->ClientSecret);
             $this->ClientSecret = '';
         }
@@ -188,7 +188,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     public function isSecretValid($secret)
     {
         // Fallback for historical unhashed tokens.
-        if (empty(trim($this->HashedClientSecret))) {
+        if (empty(trim((string) $this->HashedClientSecret))) {
             return $this->ClientSecret === $secret;
         }
 

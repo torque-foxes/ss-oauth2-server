@@ -10,7 +10,7 @@ class ClientEntityTest extends SapphireTest
 {
     protected $usesDatabase = true;
 
-    public function testRedirectUriRequired()
+    public function testRedirectUriRequired(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -19,7 +19,7 @@ class ClientEntityTest extends SapphireTest
         $e->write();
     }
 
-    public function testRedirectUriWhitespace()
+    public function testRedirectUriWhitespace(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -29,7 +29,7 @@ class ClientEntityTest extends SapphireTest
         $e->write();
     }
 
-    public function testValidatePass()
+    public function testValidatePass(): void
     {
         $e = new ClientEntity();
         $e->populateDefaults();
@@ -37,7 +37,7 @@ class ClientEntityTest extends SapphireTest
         $e->write();
     }
 
-    public function testLegacySecretMigratesToHashed()
+    public function testLegacySecretMigratesToHashed(): void
     {
         $e = new ClientEntity();
         $e->ClientIdentifier = '123';
@@ -49,7 +49,7 @@ class ClientEntityTest extends SapphireTest
         $this->assertTrue($e->isSecretValid('abc'));
     }
 
-    public function testSecretWorks()
+    public function testSecretWorks(): void
     {
         $e = new ClientEntity();
         $e->ClientRedirectUri = 'http://somewhere.lan/oauth2/callback';
@@ -64,7 +64,7 @@ class ClientEntityTest extends SapphireTest
         $this->assertTrue($e->isSecretValid($secret));
     }
 
-    public function testSecretIsNotAvailableAfterWriting()
+    public function testSecretIsNotAvailableAfterWriting(): void
     {
         $e = new ClientEntity();
         $e->ClientRedirectUri = 'http://somewhere.lan/oauth2/callback';
@@ -78,7 +78,7 @@ class ClientEntityTest extends SapphireTest
         $this->assertEquals($hiddenSecret, '<hidden>');
     }
 
-    public function testLegacyWarningIsShown()
+    public function testLegacyWarningIsShown(): void
     {
         $e = new ClientEntity();
         $e->ClientIdentifier = '123';
