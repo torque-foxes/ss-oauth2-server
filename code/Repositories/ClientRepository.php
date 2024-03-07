@@ -6,15 +6,15 @@
 
 namespace IanSimpson\OAuth2\Repositories;
 
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use IanSimpson\OAuth2\Entities\ClientEntity;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 class ClientRepository implements ClientRepositoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getClientEntity($clientIdentifier)
+    public function getClientEntity($clientIdentifier): ?ClientEntity
     {
         $clients = ClientEntity::get()->filter([
             'ClientIdentifier' => $clientIdentifier,
@@ -33,14 +33,14 @@ class ClientRepository implements ClientRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function validateClient($clientIdentifier, $clientSecret, $grantType = null)
+    public function validateClient($clientIdentifier, $clientSecret, $grantType = null): bool
     {
         $client = $this->getClientEntity($clientIdentifier);
 
         if ($client instanceof ClientEntity && $client->ClientConfidential
-            && $client->isSecretValid($clientSecret)
+                                            && $client->isSecretValid($clientSecret)
         ) {
             return true;
         }

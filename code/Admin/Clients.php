@@ -13,37 +13,39 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\SiteConfig\SiteConfig;
 
+/**
+ * @method SiteConfig getOwner()
+ */
 class ClientAdmin extends DataExtension
 {
-    private static $has_many = [
+    private static array $has_many = [
         'Clients' => ClientEntity::class,
     ];
 
-    public function updateCMSFields(FieldList $fields)
+    public function updateCMSFields(FieldList $fields): void
     {
         $gridFieldConfig = GridFieldConfig::create();
-        $button = new GridFieldAddNewButton('toolbar-header-right');
+        $button          = GridFieldAddNewButton::create('toolbar-header-right');
         $button->setButtonName('Add New OAuth Client');
         $gridFieldConfig->addComponents(
-            new GridFieldToolbarHeader(),
+            GridFieldToolbarHeader::create(),
             $button,
-            new GridFieldDataColumns(),
-            new GridFieldEditButton(),
-            new GridFieldDeleteAction(),
-            new GridFieldDetailForm()
+            GridFieldDataColumns::create(),
+            GridFieldEditButton::create(),
+            GridFieldDeleteAction::create(),
+            GridFieldDetailForm::create()
         );
 
         $fields->addFieldToTab(
-            "Root.OAuthConfiguration",
-            new GridField(
+            'Root.OAuthConfiguration',
+            GridField::create(
                 'Clients',
                 'Clients',
-                $this->owner->Clients(),
+                $this->getOwner()->Clients(),
                 $gridFieldConfig
             )
         );
-
-        return $fields;
     }
 }

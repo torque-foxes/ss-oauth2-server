@@ -8,6 +8,7 @@ namespace IanSimpson\OAuth2\Entities;
 
 use DateInterval;
 use DateTimeImmutable;
+use Exception;
 use IanSimpson\OAuth2\OauthServerController;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -27,28 +28,31 @@ use SilverStripe\Security\Member;
  * @property int ClientID
  * @property int MemberID
  * @property SS_List ScopeEntities
+ *
  * @method ClientEntity Client()
- * @method Member Member()
+ * @method Member       Member()
  * @method ManyManyList ScopeEntities()
  */
 class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 {
-    use AccessTokenTrait, TokenEntityTrait, EntityTrait;
+    use AccessTokenTrait;
+    use TokenEntityTrait;
+    use EntityTrait;
 
-    private static $table_name = 'OAuth_AccessTokenEntity';
+    private static string $table_name = 'OAuth_AccessTokenEntity';
 
-    private static $db = [
-        'Code' => 'Text',
-        'Expiry' => 'Datetime',
-        'Revoked' => 'Boolean'
+    private static array $db = [
+        'Code'    => 'Text',
+        'Expiry'  => 'Datetime',
+        'Revoked' => 'Boolean',
     ];
 
-    private static $has_one = [
+    private static array $has_one = [
         'Client' => ClientEntity::class,
     ];
 
-    private static $many_many = [
-        'ScopeEntities' => ScopeEntity::class
+    private static array $many_many = [
+        'ScopeEntities' => ScopeEntity::class,
     ];
 
     public function getIdentifier()
@@ -56,67 +60,78 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this->Code;
     }
 
-    public function getExpiryDateTime()
+    /**
+     * @throws Exception
+     */
+    public function getExpiryDateTime(): DateTimeImmutable
     {
         $date = new DateTimeImmutable();
         $date->setTimestamp((int) $this->Expiry);
-        $date = $date->add(new DateInterval(OauthServerController::getGrantTypeExpiryInterval()));
 
-        return $date;
+        return $date->add(new DateInterval(OauthServerController::getGrantTypeExpiryInterval()));
     }
 
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
-        return $this->Client()->MemberID;
+        return (string) $this->Client()->MemberID;
     }
 
-    public function getScopes()
+    public function getScopes(): array
     {
         return $this->ScopeEntities()->toArray();
     }
 
-    public function getClient()
+    public function getClient(): null|ClientEntity|DataObject
     {
-        $clients = ClientEntity::get()->filter(array(
-            'ID' => $this->ClientID
-        ));
-        /** @var ClientEntity $client */
-        $client = $clients->first();
-        return $client;
+        $clients = ClientEntity::get()->filter([
+            'ID' => $this->ClientID,
+        ]);
+
+        return $clients->first();
     }
 
-    public function setIdentifier($code)
+    public function setIdentifier($code): self
     {
         $this->Code = $code;
+
+        return $this;
     }
 
-    public function setExpiryDateTime(DateTimeImmutable $expiry)
+    public function setExpiryDateTime(DateTimeImmutable $expiry): self
     {
         $this->Expiry = $expiry->getTimestamp();
+
+        return $this;
     }
 
-    public function setUserIdentifier($id)
+    public function setUserIdentifier($id): self
     {
         $this->MemberID = $id;
+
+        return $this;
     }
 
-    public function addScope(ScopeEntityInterface $scope)
+    public function addScope(ScopeEntityInterface $scope): self
     {
         $this->ScopeEntities()->add($scope);
+
+        return $this;
     }
 
-    public function setScopes($scopes)
+    public function setScopes($scopes): self
     {
         $this->ScopeEntities()->removeall();
         foreach ($scopes as $scope) {
             $this->addScope($scope);
         }
+
+        return $this;
     }
 
-    public function setClient(ClientEntityInterface $client)
+    public function setClient(ClientEntityInterface $client): self
     {
-        /** @var ClientEntity $clientEntity */
-        $clientEntity = $client;
-        $this->ClientID = $clientEntity->ID;
+        $this->ClientID = $client->ID;
+
+        return $this;
     }
 }

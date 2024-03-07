@@ -7,17 +7,15 @@
 namespace IanSimpson\OAuth2\Entities;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
-use SilverStripe\Security\Member;
+use SilverStripe\Security\Security;
 
 class UserEntity implements UserEntityInterface
 {
     /**
      * Return the user's identifier.
-     *
-     * @return mixed
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?int
     {
-        return Member::currentUserID();
+        return Security::getCurrentUser()?->ID;
     }
 }

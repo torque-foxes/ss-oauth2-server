@@ -6,27 +6,30 @@
 
 namespace IanSimpson\OAuth2\Repositories;
 
+use IanSimpson\OAuth2\Entities\AccessTokenEntity;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use IanSimpson\OAuth2\Entities\AccessTokenEntity;
+use SilverStripe\ORM\DataObject;
 
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
-    public function getAccessToken($tokenId)
+    public function getAccessToken($tokenId): null|AccessTokenEntity|DataObject
     {
         $clients = AccessTokenEntity::get()->filter([
             'Code' => $tokenId,
         ]);
+
         return $clients->first();
     }
+
     /**
      * {@inheritdoc}
      */
-    public function persistNewAccessToken(AccessTokenEntityInterface $accessToken)
+    public function persistNewAccessToken(AccessTokenEntityInterface $accessToken): void
     {
         /** @var AccessTokenEntity $accessTokenEntity */
-        $accessTokenEntity = $accessToken;
+        $accessTokenEntity       = $accessToken;
         $accessTokenEntity->Code = $accessTokenEntity->getIdentifier();
         $accessTokenEntity->write();
     }
@@ -34,10 +37,10 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function revokeAccessToken($tokenId)
+    public function revokeAccessToken($tokenId): void
     {
         // Some logic here to revoke the access token
-        $token = $this->getAccessToken($tokenId);
+        $token          = $this->getAccessToken($tokenId);
         $token->Revoked = true;
         $token->write();
     }
@@ -45,16 +48,17 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function isAccessTokenRevoked($tokenId)
+    public function isAccessTokenRevoked($tokenId): bool
     {
         $token = $this->getAccessToken($tokenId);
+
         return (bool) $token->Revoked;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
+    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): AccessTokenEntity
     {
         $accessToken = new AccessTokenEntity();
         $accessToken->setClient($clientEntity);

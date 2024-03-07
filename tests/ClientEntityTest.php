@@ -2,10 +2,13 @@
 
 namespace IanSimpson\Tests;
 
-use SilverStripe\Dev\SapphireTest;
 use IanSimpson\OAuth2\Entities\ClientEntity;
+use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\ValidationException;
 
+/**
+ * @internal
+ */
 class ClientEntityTest extends SapphireTest
 {
     protected $usesDatabase = true;
@@ -39,9 +42,9 @@ class ClientEntityTest extends SapphireTest
 
     public function testLegacySecretMigratesToHashed(): void
     {
-        $e = new ClientEntity();
-        $e->ClientIdentifier = '123';
-        $e->ClientSecret = 'abc';
+        $e                    = new ClientEntity();
+        $e->ClientIdentifier  = '123';
+        $e->ClientSecret      = 'abc';
         $e->ClientRedirectUri = 'http://somewhere.lan/oauth2/callback';
         $e->write();
 
@@ -51,7 +54,7 @@ class ClientEntityTest extends SapphireTest
 
     public function testSecretWorks(): void
     {
-        $e = new ClientEntity();
+        $e                    = new ClientEntity();
         $e->ClientRedirectUri = 'http://somewhere.lan/oauth2/callback';
         $e->populateDefaults();
 
@@ -66,12 +69,12 @@ class ClientEntityTest extends SapphireTest
 
     public function testSecretIsNotAvailableAfterWriting(): void
     {
-        $e = new ClientEntity();
+        $e                    = new ClientEntity();
         $e->ClientRedirectUri = 'http://somewhere.lan/oauth2/callback';
         $e->populateDefaults();
         $e->write();
 
-        $refreshed = ClientEntity::get()->byID($e->ID);
+        $refreshed   = ClientEntity::get()->byID($e->ID);
         $secretField = $refreshed->getCMSFields()->fieldByName('Root.Main.HashedClientSecret');
         $this->assertNull($secretField);
         $hiddenSecret = $refreshed->getCMSFields()->fieldByName('Root.Main.HiddenHashedClientSecret')->Value();
@@ -80,9 +83,9 @@ class ClientEntityTest extends SapphireTest
 
     public function testLegacyWarningIsShown(): void
     {
-        $e = new ClientEntity();
-        $e->ClientIdentifier = '123';
-        $e->ClientSecret = 'abc';
+        $e                    = new ClientEntity();
+        $e->ClientIdentifier  = '123';
+        $e->ClientSecret      = 'abc';
         $e->ClientRedirectUri = 'http://somewhere.lan/oauth2/callback';
 
         $secret = $e->getCMSFields()->fieldByName('Root.Main.HashedClientSecret');

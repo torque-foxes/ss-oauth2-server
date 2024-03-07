@@ -15,39 +15,40 @@ use SilverStripe\SiteConfig\SiteConfig;
  * @property int SiteConfigID
  * @property string ScopeIdentifier
  * @property string ScopeDescription
+ *
  * @method SiteConfig SiteConfig()
  */
 class ScopeEntity extends DataObject implements ScopeEntityInterface
 {
     use EntityTrait;
 
-    private static $table_name = 'OAuth_ScopeEntity';
+    private static string $table_name = 'OAuth_ScopeEntity';
 
-    private static $singular_name = 'OAuth Scope';
-    private static $plural_name = 'OAuth Scopes';
+    private static string $singular_name = 'OAuth Scope';
+    private static string $plural_name   = 'OAuth Scopes';
 
-    private static $db = [
-        'ScopeIdentifier' => 'Varchar(32)',
-        'ScopeDescription' => 'Text'
+    private static array $db = [
+        'ScopeIdentifier'  => 'Varchar(32)',
+        'ScopeDescription' => 'Text',
     ];
 
-    private static $has_one = [
-        'SiteConfig' => SiteConfig::class
+    private static array $has_one = [
+        'SiteConfig' => SiteConfig::class,
     ];
 
-    private static $summary_fields = [
-        'ScopeIdentifier'
+    private static array $summary_fields = [
+        'ScopeIdentifier',
     ];
 
-    private static $indexes = [
+    private static array $indexes = [
         'ScopeIdentifier' => [
-            'type' => 'index',
-            'columns' => ['ScopeIdentifier']
+            'type'    => 'index',
+            'columns' => ['ScopeIdentifier'],
         ],
         'ScopeIdentifierUnique' => [
-            'type' => 'unique',
-            'columns' => ['ScopeIdentifier']
-        ]
+            'type'    => 'unique',
+            'columns' => ['ScopeIdentifier'],
+        ],
     ];
 
     public function jsonSerialize(): mixed
