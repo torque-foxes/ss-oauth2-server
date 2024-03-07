@@ -1,8 +1,8 @@
 {
     "name": "iansimpson/ss-oauth2-server",
     "description": "Silverstripe OAuth 2.0 Server",
+    "license": "MIT",
     "type": "silverstripe-vendormodule",
-    "homepage": "https://logicstudio.nz",
     "keywords": [
         "silverstripe",
         "oauth",
@@ -10,33 +10,37 @@
         "oauth 2",
         "oauth 2.0"
     ],
-    "license": "MIT",
     "authors": [
         {
             "name": "Ian Simpson",
             "email": "ian@iansimpson.nz"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "IanSimpson\\OAuth2\\": "src/",
-            "IanSimpson\\OAuth2\\Tests\\": "tests/"
-        }
-    },
+    "homepage": "https://logicstudio.nz",
     "require": {
         "php": "^8.1",
-        "monolog/monolog": "^1.2",
-        "silverstripe/siteconfig": "^4.13",
-        "silverstripe/framework": "^4.13",
-        "league/oauth2-server": "^8.2",
         "guzzlehttp/psr7": "^2.5",
-        "robbie/psr7-adapters": "^1"
+        "league/oauth2-server": "^8.2",
+        "monolog/monolog": "^1.2",
+        "robbie/psr7-adapters": "^1",
+        "silverstripe/framework": "^4.13",
+        "silverstripe/siteconfig": "^4.13"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "IanSimpson\\OAuth2\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IanSimpson\\OAuth2\\Tests\\": "tests/"
+        }
+    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
