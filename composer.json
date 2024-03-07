@@ -3,10 +3,19 @@
     "description": "Silverstripe OAuth 2.0 Server",
     "type": "silverstripe-vendormodule",
     "homepage": "https://logicstudio.nz",
-    "keywords": ["silverstripe", "oauth", "oauth2", "oauth 2", "oauth 2.0"],
+    "keywords": [
+        "silverstripe",
+        "oauth",
+        "oauth2",
+        "oauth 2",
+        "oauth 2.0"
+    ],
     "license": "MIT",
     "authors": [
-        {"name": "Ian Simpson","email": "ian@iansimpson.nz"}
+        {
+            "name": "Ian Simpson",
+            "email": "ian@iansimpson.nz"
+        }
     ],
     "autoload": {
         "psr-4": {

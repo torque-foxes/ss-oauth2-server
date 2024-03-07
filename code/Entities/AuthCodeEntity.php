@@ -6,6 +6,7 @@
 
 namespace IanSimpson\OAuth2\Entities;
 
+use DateTime;
 use DateTimeImmutable;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -25,37 +26,40 @@ use SilverStripe\Security\Member;
  * @property int ClientID
  * @property int MemberID
  * @property SS_List ScopeEntities
+ *
  * @method ClientEntity Client()
- * @method Member Member()
+ * @method Member       Member()
  * @method ManyManyList ScopeEntities()
  */
 class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
 {
-    use EntityTrait, TokenEntityTrait, AuthCodeTrait;
+    use EntityTrait;
+    use TokenEntityTrait;
+    use AuthCodeTrait;
 
     private static $table_name = 'OAuth_AuthCodeEntity';
 
-    private static $db = [
-        'Code' => 'Text',
-        'Expiry' => 'Datetime',
-        'Revoked' => 'Boolean'
+    private static array $db = [
+        'Code'    => 'Text',
+        'Expiry'  => 'Datetime',
+        'Revoked' => 'Boolean',
     ];
 
-    private static $has_one = [
+    private static array $has_one = [
         'Client' => ClientEntity::class,
-        'Member' => Member::class
+        'Member' => Member::class,
     ];
 
-    private static $many_many = [
-        'ScopeEntities' => ScopeEntity::class
+    private static array $many_many = [
+        'ScopeEntities' => ScopeEntity::class,
     ];
 
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
-        return $this->Code;
+        return (string) $this->Code;
     }
 
-    public function getExpiryDateTime()
+    public function getExpiryDateTime(): DateTime
     {
         $date = new DateTime();
         $date->setTimestamp((int) $this->Expiry);
@@ -63,59 +67,67 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $date;
     }
 
-    public function getUserIdentifier()
+    public function getUserIdentifier(): int
     {
-        return $this->MemberID;
+        return (int) $this->MemberID;
     }
 
-    public function getScopes()
+    public function getScopes(): array
     {
         return $this->ScopeEntities()->toArray();
     }
 
-    public function getClient()
+    public function getClient(): null|ClientEntity|DataObject
     {
-        $clients = ClientEntity::get()->filter(array(
-            'ID' => $this->ClientID
-        ));
-        /** @var ClientEntity $client */
-        $client = $clients->first();
-        return $client;
+        $clients = ClientEntity::get()->filter([
+            'ID' => $this->ClientID,
+        ]);
+
+        return $clients->first();
     }
 
-
-    public function setIdentifier($code)
+    public function setIdentifier($code): self
     {
         $this->Code = $code;
+
+        return $this;
     }
 
-    public function setExpiryDateTime(DateTimeImmutable $expiry)
+    public function setExpiryDateTime(DateTimeImmutable $expiry): self
     {
         $this->Expiry = $expiry->getTimestamp();
+
+        return $this;
     }
 
-    public function setUserIdentifier($id)
+    public function setUserIdentifier($id): self
     {
         $this->MemberID = $id;
+
+        return $this;
     }
 
-    public function addScope(ScopeEntityInterface $scope)
+    public function addScope(ScopeEntityInterface $scope): self
     {
         $this->ScopeEntities()->add($scope);
+
+        return $this;
     }
 
-    public function setScopes($scopes)
+    public function setScopes($scopes): self
     {
         $this->ScopeEntities()->removeAll();
         foreach ($scopes as $scope) {
             $this->addScope($scope);
         }
+
+        return $this;
     }
 
-    public function setClient(ClientEntityInterface $client)
+    public function setClient(ClientEntityInterface $client): self
     {
-        /** @var ClientEntity $clientEntity */
-        $clientEntity = $client;
-        $this->ClientID = $clientEntity->ID;
+        $this->ClientID = $client->ID;
+
+        return $this;
     }
 }

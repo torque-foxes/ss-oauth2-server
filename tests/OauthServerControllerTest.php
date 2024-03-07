@@ -2,25 +2,28 @@
 
 namespace IanSimpson\Tests;
 
+use DateTimeImmutable;
 use GuzzleHttp\Psr7\Query;
-use SilverStripe\Core\Environment;
 use IanSimpson\OAuth2\Entities\AccessTokenEntity;
 use IanSimpson\OAuth2\Entities\AuthCodeEntity;
 use IanSimpson\OAuth2\Entities\ClientEntity;
 use IanSimpson\OAuth2\OauthServerController;
-use DateTimeImmutable;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token\Parser;
+use Lcobucci\JWT\Validation\Validator;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\CryptTrait;
+use Monolog\Logger;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
-use Monolog\Logger;
-use Lcobucci\JWT\Validation\Validator;
-use Lcobucci\JWT\Token\Parser;
 
+/**
+ * @internal
+ */
 class OauthServerControllerTest extends FunctionalTest
 {
     use CryptTrait;
@@ -42,8 +45,8 @@ class OauthServerControllerTest extends FunctionalTest
         $encryptionKey = 'lxZFUEsBCJ2Yb14IF2ygAHI5N4+ZAUXXaSeeJm6+twsUmIen';
         $this->setEncryptionKey($encryptionKey);
 
-        $publicKey = __DIR__. '/public.key';
-        $privateKey = __DIR__. '/private.key';
+        $publicKey  = __DIR__ . '/public.key';
+        $privateKey = __DIR__ . '/private.key';
 
         Environment::putEnv('OAUTH_PUBLIC_KEY_PATH=' . $publicKey);
         Environment::putEnv('OAUTH_PRIVATE_KEY_PATH=' . $privateKey);
@@ -68,8 +71,8 @@ class OauthServerControllerTest extends FunctionalTest
     public function testAuthorize(): void
     {
         $state = 789;
-        $c = $this->objFromFixture(ClientEntity::class, 'test');
-        $m = $this->objFromFixture('Member', 'joe');
+        $c     = $this->objFromFixture(ClientEntity::class, 'test');
+        $m     = $this->objFromFixture('Member', 'joe');
         $this->logInAs($m->ID);
 
         $this->logger->expects($this->once())
@@ -86,14 +89,14 @@ class OauthServerControllerTest extends FunctionalTest
         ));
 
         $this->assertEquals(302, $resp->getStatusCode());
-        $url = parse_url($resp->getHeader('Location'));
+        $url   = parse_url($resp->getHeader('Location'));
         $query = Query::parse($url['query']);
         $this->assertEquals($url['host'], 'client');
         $this->assertEquals($url['path'], '/callback');
         $this->assertEquals($query['state'], $state);
 
         // Have a look inside payload too.
-        $payload = json_decode($this->decrypt($query['code']), true);
+        $payload        = json_decode($this->decrypt($query['code']), true);
         $authCodeEntity = AuthCodeEntity::get()->filter('Code', $payload['auth_code_id'])->first();
         $this->assertEquals($payload['client_id'], $c->ClientIdentifier);
         $this->assertEquals($payload['user_id'], $m->ID);
@@ -103,19 +106,19 @@ class OauthServerControllerTest extends FunctionalTest
     public function testAccessToken(): void
     {
         $redir = 'http://client/callback';
-        $c = $this->objFromFixture(ClientEntity::class, 'test');
-        $m = $this->objFromFixture('Member', 'joe');
-        $ac = $this->objFromFixture(AuthCodeEntity::class, 'test');
+        $c     = $this->objFromFixture(ClientEntity::class, 'test');
+        $m     = $this->objFromFixture('Member', 'joe');
+        $ac    = $this->objFromFixture(AuthCodeEntity::class, 'test');
 
         // Make fake code.
         $payload = [
-            'client_id' => $c->ClientIdentifier,
-            'redirect_uri' => $redir,
-            'auth_code_id' => $ac->Code,
-            'scopes' => [],
-            'user_id' => $m->ID,
-            'expire_time' => strtotime('2099-06-06 12:00:00'),
-            'code_challenge' => null,
+            'client_id'             => $c->ClientIdentifier,
+            'redirect_uri'          => $redir,
+            'auth_code_id'          => $ac->Code,
+            'scopes'                => [],
+            'user_id'               => $m->ID,
+            'expire_time'           => strtotime('2099-06-06 12:00:00'),
+            'code_challenge'        => null,
             'code_challenge_method' => null,
         ];
         $authCode = $this->encrypt(json_encode($payload));
@@ -124,9 +127,9 @@ class OauthServerControllerTest extends FunctionalTest
             'client_id' => $c->ClientIdentifier,
             // Secret cannot be obtained from $c, at this point it's already hashed.
             'client_secret' => '456',
-            'code' => $authCode,
-            'grant_type' => 'authorization_code',
-            'redirect_uri' => $redir,
+            'code'          => $authCode,
+            'grant_type'    => 'authorization_code',
+            'redirect_uri'  => $redir,
         ]);
 
         $at = AccessTokenEntity::get()->last();
@@ -146,11 +149,11 @@ class OauthServerControllerTest extends FunctionalTest
 
     public function testAuthenticateRequest(): void
     {
-        $c = $this->objFromFixture(ClientEntity::class, 'test');
-        $m = $this->objFromFixture('Member', 'joe');
+        $c  = $this->objFromFixture(ClientEntity::class, 'test');
+        $m  = $this->objFromFixture('Member', 'joe');
         $at = $this->objFromFixture(AccessTokenEntity::class, 'test');
 
-        $now = new DateTimeImmutable();
+        $now    = new DateTimeImmutable();
         $expiry = new DateTimeImmutable($at->Expiry);
         $config = Configuration::forSymmetricSigner(
             new Sha256(),
@@ -186,12 +189,13 @@ class OauthServerControllerTest extends FunctionalTest
 
     private function tokenIsOk($jwt)
     {
-        $pk = new CryptKey(__DIR__ . '/test.crt');
+        $pk    = new CryptKey(__DIR__ . '/test.crt');
         $token = (new Parser())->parse($jwt);
 
         $validator = new Validator();
+
         return $validator->validate($token, []);
-//        return $token->verify(new Sha256(), $pk->getKeyPath());
+        //        return $token->verify(new Sha256(), $pk->getKeyPath());
     }
 
     private function tokenGetClaims($jwt)
@@ -199,4 +203,3 @@ class OauthServerControllerTest extends FunctionalTest
         return (new Parser())->parse($jwt)->claims()->all();
     }
 }
-

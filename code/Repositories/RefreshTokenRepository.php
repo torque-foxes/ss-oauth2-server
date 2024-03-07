@@ -6,26 +6,29 @@
 
 namespace IanSimpson\OAuth2\Repositories;
 
+use IanSimpson\OAuth2\Entities\RefreshTokenEntity;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use IanSimpson\OAuth2\Entities\RefreshTokenEntity;
+use SilverStripe\ORM\DataObject;
 
 class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {
-    public function getRefreshToken($tokenId)
+    public function getRefreshToken($tokenId): null|DataObject|RefreshTokenEntity
     {
         $clients = RefreshTokenEntity::get()->filter([
             'Code' => $tokenId,
         ]);
+
         return $clients->first();
     }
+
     /**
      * {@inheritdoc}
      */
-    public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshToken)
+    public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshToken): void
     {
         /** @var RefreshTokenEntity $refreshTokenEntity */
-        $refreshTokenEntity = $refreshToken;
+        $refreshTokenEntity       = $refreshToken;
         $refreshTokenEntity->Code = $refreshTokenEntity->getIdentifier();
         $refreshTokenEntity->write();
     }
@@ -33,10 +36,10 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function revokeRefreshToken($tokenId)
+    public function revokeRefreshToken($tokenId): void
     {
         // Some logic to revoke the refresh token in a database
-        $token = $this->getRefreshToken($tokenId);
+        $token          = $this->getRefreshToken($tokenId);
         $token->Revoked = true;
         $token->write();
     }
@@ -44,16 +47,17 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function isRefreshTokenRevoked($tokenId)
+    public function isRefreshTokenRevoked($tokenId): bool
     {
         $token = $this->getRefreshToken($tokenId);
+
         return (bool) $token->Revoked;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getNewRefreshToken()
+    public function getNewRefreshToken(): RefreshTokenEntity
     {
         return new RefreshTokenEntity();
     }

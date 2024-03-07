@@ -7,9 +7,8 @@
 namespace IanSimpson\OAuth2\Entities;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use SilverStripe\Forms\ReadonlyField;
 use League\OAuth2\Server\Entities\Traits\ClientTrait;
-use League\OAuth2\Server\Entities\Traits\EntityTrait;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
@@ -18,63 +17,62 @@ use SilverStripe\SiteConfig\SiteConfig;
 
 /**
  * @property int SiteConfigID
- * @property string ClientName
- * @property string ClientRedirectUri
- * @property string ClientIdentifier
- * @property string ClientSecret
- * @property string HashedClientSecret
- * @property string ClientSecretHashMethod
- * @property string ClientSecretHashIterations
- * @property string ClientSecretSalt
+ * @property ?string ClientName
+ * @property ?string ClientRedirectUri
+ * @property ?string ClientIdentifier
+ * @property ?string ClientSecret
+ * @property ?string HashedClientSecret
+ * @property ?string ClientSecretHashMethod
+ * @property ?string ClientSecretHashIterations
+ * @property ?string ClientSecretSalt
  * @property bool ClientConfidential
- * @method SiteConfig SiteConfig()
  *
+ * @method SiteConfig SiteConfig()
  */
 class ClientEntity extends DataObject implements ClientEntityInterface
 {
-
     use ClientTrait;
 
-    private static $hash_method = 'sha512';
+    private static string $hash_method = 'sha512';
 
-    private static $hash_iterations = 20000;
+    private static int $hash_iterations = 20000;
 
-    private static $table_name = 'OAuth_ClientEntity';
+    private static string $table_name = 'OAuth_ClientEntity';
 
-    private static $singular_name = 'OAuth Client';
+    private static string $singular_name = 'OAuth Client';
 
-    private static $plural_name = 'OAuth Clients';
+    private static string $plural_name = 'OAuth Clients';
 
-    private static $db = [
-        'ClientName' => 'Varchar(100)',
-        'ClientRedirectUri' => 'Varchar(100)',
-        'ClientIdentifier' => 'Varchar(32)',
-        'ClientSecret' => 'Varchar(64)',
-        'HashedClientSecret' => 'Varchar(128)',
-        'ClientSecretHashMethod' => 'Varchar(50)',
+    private static array $db = [
+        'ClientName'                 => 'Varchar(100)',
+        'ClientRedirectUri'          => 'Varchar(100)',
+        'ClientIdentifier'           => 'Varchar(32)',
+        'ClientSecret'               => 'Varchar(64)',
+        'HashedClientSecret'         => 'Varchar(128)',
+        'ClientSecretHashMethod'     => 'Varchar(50)',
         'ClientSecretHashIterations' => 'Varchar(50)',
-        'ClientSecretSalt' => 'Varchar(50)',
-        'ClientConfidential' => 'Boolean'
+        'ClientSecretSalt'           => 'Varchar(50)',
+        'ClientConfidential'         => 'Boolean',
     ];
 
-    private static $has_one = [
+    private static array $has_one = [
         'SiteConfig' => SiteConfig::class,
     ];
 
-    private static $summary_fields = [
+    private static array $summary_fields = [
         'ClientName',
-        'ClientIdentifier'
+        'ClientIdentifier',
     ];
 
-    private static $indexes = [
+    private static array $indexes = [
         'ClientIdentifier' => [
-            'type' => 'index',
-            'columns' => ['ClientIdentifier']
+            'type'    => 'index',
+            'columns' => ['ClientIdentifier'],
         ],
         'ClientIdentifierUnique' => [
-            'type' => 'unique',
-            'columns' => ['ClientIdentifier']
-        ]
+            'type'    => 'unique',
+            'columns' => ['ClientIdentifier'],
+        ],
     ];
 
     public function getCMSFields()
@@ -94,7 +92,6 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         } else {
             if (!$this->ID && !empty(trim((string) $this->HashedClientSecret))) {
                 // Must use existing field, otherwise loses the initial value. See note in populateDefaults below.
-                /** @var \FormField $secretField */
                 $secretField = $fields->fieldByName('Root.Main.HashedClientSecret');
                 $secretField->setTitle('Client secret');
                 $secretField->setDescription('Please copy this securely to the client. This password will disappear from here forever after save.');
@@ -110,7 +107,8 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @return ValidationResult
      */
     public function validate()
@@ -131,20 +129,20 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function populateDefaults()
     {
         parent::populateDefaults();
 
-        $this->ClientIdentifier = substr((new RandomGenerator())->randomToken(), 0, 32);
+        $this->ClientIdentifier = mb_substr((new RandomGenerator())->randomToken(), 0, 32);
 
         // There is some evil Framework magic that calls populateDefaults twice and yet still somehow
         // manages to save into the DB the initial values. This only works for DB fields that are present
         // in the form, otherwise the secret will change from under the user. If you check Member::onBeforeWrite,
         // that's apparently what you are supposed to do - temporarily store unhashed value in the DB field.
         // ~330 bits of entropy (64 characters [a-z0-9]).
-        $this->HashedClientSecret = substr((new RandomGenerator())->randomToken(), 0, 64);
+        $this->HashedClientSecret = mb_substr((new RandomGenerator())->randomToken(), 0, 64);
     }
 
     public function onBeforeWrite()
@@ -163,29 +161,29 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         parent::onBeforeWrite();
     }
 
-    public function getName()
+    public function getName(): string
     {
-        return $this->ClientName;
+        return (string) $this->ClientName;
     }
 
-    public function getRedirectUri()
+    public function getRedirectUri(): string
     {
-        return $this->ClientRedirectUri;
+        return (string) $this->ClientRedirectUri;
     }
 
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
-        return $this->ClientIdentifier;
+        return (string) $this->ClientIdentifier;
     }
 
-    public function setConfidential()
+    public function setConfidential(): self
     {
         $this->isConfidential = $this->ClientConfidential;
 
         return $this;
     }
 
-    public function isSecretValid($secret)
+    public function isSecretValid($secret): bool
     {
         // Fallback for historical unhashed tokens.
         if (empty(trim((string) $this->HashedClientSecret))) {
@@ -202,7 +200,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         return $this->HashedClientSecret === $candidateHash;
     }
 
-    private function storeSafely($secret)
+    private function storeSafely($secret): void
     {
         if (empty($this->ClientSecretHashMethod)) {
             $this->ClientSecretHashMethod = $this->config()->hash_method;
@@ -211,7 +209,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
             $this->ClientSecretHashIterations = $this->config()->hash_iterations;
         }
         if (empty($this->ClientSecretSalt)) {
-            $this->ClientSecretSalt = substr((new RandomGenerator())->randomToken(), 0, 32);
+            $this->ClientSecretSalt = mb_substr((new RandomGenerator())->randomToken(), 0, 32);
         }
 
         $this->HashedClientSecret = hash_pbkdf2(
