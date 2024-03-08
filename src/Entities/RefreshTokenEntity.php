@@ -14,11 +14,10 @@ use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
 use SilverStripe\ORM\DataObject;
 
 /**
- * @property ?string Code
- * @property ?string Expiry
- * @property bool Revoked
- * @property int AccessTokenID
- *
+ * @property string $Code
+ * @property string $Expiry
+ * @property bool $Revoked
+ * @property int $AccessTokenID
  * @method AccessTokenEntity AccessToken()
  */
 class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterface

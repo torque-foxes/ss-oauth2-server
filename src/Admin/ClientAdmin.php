@@ -2,7 +2,7 @@
 
 namespace IanSimpson\OAuth2\Admin;
 
-use IanSimpson\OAuth2\Entities\ScopeEntity;
+use IanSimpson\OAuth2\Entities\ClientEntity;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
@@ -13,22 +13,24 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\HasManyList;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
- * @method SiteConfig getOwner()
+ * @method HasManyList|ClientEntity[] Clients()
+ * @method SiteConfig&static getOwner()
  */
-class ScopeAdmin extends DataExtension
+class ClientAdmin extends DataExtension
 {
     private static array $has_many = [
-        'Scopes' => ScopeEntity::class,
+        'Clients' => ClientEntity::class,
     ];
 
     public function updateCMSFields(FieldList $fields): void
     {
         $gridFieldConfig = GridFieldConfig::create();
         $button          = GridFieldAddNewButton::create('toolbar-header-right');
-        $button->setButtonName('Add New OAuth Scope');
+        $button->setButtonName('Add New OAuth Client');
         $gridFieldConfig->addComponents(
             GridFieldToolbarHeader::create(),
             $button,
@@ -41,9 +43,9 @@ class ScopeAdmin extends DataExtension
         $fields->addFieldToTab(
             'Root.OAuthConfiguration',
             GridField::create(
-                'Scopes',
-                'Scopes',
-                $this->getOwner()->Scopes(),
+                'Clients',
+                'Clients',
+                $this->getOwner()->Clients(),
                 $gridFieldConfig
             )
         );

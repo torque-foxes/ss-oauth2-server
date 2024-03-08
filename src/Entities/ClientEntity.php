@@ -11,22 +11,20 @@ use League\OAuth2\Server\Entities\Traits\ClientTrait;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationResult;
-use SilverStripe\Security\Member;
 use SilverStripe\Security\RandomGenerator;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
- * @property int SiteConfigID
- * @property ?string ClientName
- * @property ?string ClientRedirectUri
- * @property ?string ClientIdentifier
- * @property ?string ClientSecret
- * @property ?string HashedClientSecret
- * @property ?string ClientSecretHashMethod
- * @property ?string ClientSecretHashIterations
- * @property ?string ClientSecretSalt
- * @property bool ClientConfidential
- *
+ * @property string $ClientName
+ * @property string $ClientRedirectUri
+ * @property string $ClientIdentifier
+ * @property string $ClientSecret
+ * @property string $HashedClientSecret
+ * @property string $ClientSecretHashMethod
+ * @property string $ClientSecretHashIterations
+ * @property string $ClientSecretSalt
+ * @property bool $ClientConfidential
+ * @property int $SiteConfigID
  * @method SiteConfig SiteConfig()
  */
 class ClientEntity extends DataObject implements ClientEntityInterface

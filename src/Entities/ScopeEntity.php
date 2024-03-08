@@ -12,10 +12,9 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
- * @property int SiteConfigID
- * @property string ScopeIdentifier
- * @property string ScopeDescription
- *
+ * @property string $ScopeIdentifier
+ * @property string $ScopeDescription
+ * @property int $SiteConfigID
  * @method SiteConfig SiteConfig()
  */
 class ScopeEntity extends DataObject implements ScopeEntityInterface
