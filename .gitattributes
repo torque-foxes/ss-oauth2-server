@@ -1,0 +1,19 @@
+# IDE
+.editorconfig
+
+# Git
+.gitattributes   export-ignore
+.gitignore       export-ignore
+.github          export-ignore
+
+# Tests
+/tests            export-ignore
+phpunit.xml.dist
+
+# Coding standards
+phpcs.xml.dist
+phpstan.neon.dist
+phpstan-baseline.neon
+
+# Docs
+CONTRIBUTING.md
