@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author      Ian Simpson <ian@iansimpson.nz>
  * @copyright   Copyright (c) Ian Simpson
@@ -39,7 +40,8 @@ class ClientRepository implements ClientRepositoryInterface
     {
         $client = $this->getClientEntity($clientIdentifier);
 
-        if ($client instanceof ClientEntity && $client->ClientConfidential
+        if (
+            $client instanceof ClientEntity && $client->ClientConfidential
                                             && $client->isSecretValid($clientSecret)
         ) {
             return true;

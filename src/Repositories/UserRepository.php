@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author      Ian Simpson <ian@iansimpson.nz>
  * @copyright   Copyright (c) Ian Simpson
