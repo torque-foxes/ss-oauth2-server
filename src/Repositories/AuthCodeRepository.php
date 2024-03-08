@@ -59,6 +59,6 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
      */
     public function getNewAuthCode(): AuthCodeEntity
     {
-        return new AuthCodeEntity();
+        return AuthCodeEntity::create();
     }
 }

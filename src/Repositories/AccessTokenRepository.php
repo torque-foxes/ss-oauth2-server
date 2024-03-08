@@ -60,7 +60,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): AccessTokenEntity
     {
-        $accessToken = new AccessTokenEntity();
+        $accessToken = AccessTokenEntity::create();
         $accessToken->setClient($clientEntity);
         foreach ($scopes as $scope) {
             $accessToken->addScope($scope);

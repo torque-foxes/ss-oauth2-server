@@ -16,20 +16,17 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ManyManyList;
-use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Member;
 
 /**
- * @property string Code
- * @property string Expiry
- * @property bool Revoked
- * @property int ClientID
- * @property int MemberID
- * @property SS_List ScopeEntities
- *
+ * @property string $Code
+ * @property string $Expiry
+ * @property bool $Revoked
+ * @property int $ClientID
+ * @property int $MemberID
  * @method ClientEntity Client()
- * @method Member       Member()
- * @method ManyManyList ScopeEntities()
+ * @method Member Member()
+ * @method ManyManyList|ScopeEntity[] ScopeEntities()
  */
 class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
 {
@@ -37,7 +34,7 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
     use TokenEntityTrait;
     use AuthCodeTrait;
 
-    private static $table_name = 'OAuth_AuthCodeEntity';
+    private static string $table_name = 'OAuth_AuthCodeEntity';
 
     private static array $db = [
         'Code'    => 'Text',

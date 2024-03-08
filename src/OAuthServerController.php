@@ -6,6 +6,7 @@
 
 namespace IanSimpson\OAuth2;
 
+use Psr\Log\LoggerInterface;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -46,28 +47,28 @@ class OauthServerController extends Controller
     protected $myResponse;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
-    private $privateKey;
-    private $publicKey;
-    private $encryptionKey;
+    private string $privateKey;
+    private string $publicKey;
+    private string $encryptionKey;
 
-    private static $allowed_actions = [
+    private static array $allowed_actions = [
         'authorize',
         'accessToken',
         'validateClientGrant',
     ];
 
-    private static $url_handlers = [
+    private static array $url_handlers = [
         'authorize'         => 'authorize',
         'access_token'      => 'accessToken',
         'oauth_logon'       => 'logon',
         'validate'          => 'validateClientGrant',
     ];
 
-    private $myRequestAdapter;
-    private $myResponseAdapter;
+    private ?HttpRequestAdapter $myRequestAdapter = null;
+    private ?HttpResponseAdapter $myResponseAdapter = null;
     private $myRepositories;
 
     /**
