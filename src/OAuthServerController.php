@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author      Ian Simpson <ian@iansimpson.nz>
  * @copyright   Copyright (c) Ian Simpson
@@ -33,7 +34,7 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
-use Silverstripe\Security\Security;
+use SilverStripe\Security\Security;
 
 class OauthServerController extends Controller
 {
