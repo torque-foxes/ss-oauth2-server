@@ -1,4 +1,4 @@
-Member:
+SilverStripe\Security\Member:
   joe:
     ID: 999
     Email: joe@joe.org
@@ -15,7 +15,7 @@ IanSimpson\OAuth2\Entities\AuthCodeEntity:
     Code: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     Expiry: 2099-06-06 12:00:00
     Revoked: 0
-    Member: =>Member.joe
+    Member: =>SilverStripe\Security\Member.joe
     Client: =>IanSimpson\OAuth2\Entities\ClientEntity.test
     ScopeEntities: =>IanSimpson\OAuth2\Entities\ScopeEntity.test
 IanSimpson\OAuth2\Entities\AccessTokenEntity:
@@ -23,6 +23,6 @@ IanSimpson\OAuth2\Entities\AccessTokenEntity:
     Code: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     Expiry: 2099-06-06 12:00:00
     Revoked: 0
-    Member: =>Member.joe
+    Member: =>SilverStripe\Security\Member.joe
     Client: =>IanSimpson\OAuth2\Entities\ClientEntity.test
     ScopeEntities: =>IanSimpson\OAuth2\Entities\ScopeEntity.test
