@@ -144,7 +144,7 @@ class OauthServerControllerTest extends FunctionalTest
 
         $authCode = $this->encrypt(json_encode($payload));
 
-        $resp = $this->post('http://localhost/oauth/accessToken', [
+        $resp = $this->post('http://localhost/oauth/access_token', [
             'client_id' => $c->ClientIdentifier,
             // Secret cannot be obtained from $c, at this point it's already hashed.
             'client_secret' => '456',

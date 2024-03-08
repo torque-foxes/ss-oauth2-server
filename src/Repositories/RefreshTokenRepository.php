@@ -59,6 +59,6 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
      */
     public function getNewRefreshToken(): RefreshTokenEntity
     {
-        return new RefreshTokenEntity();
+        return RefreshTokenEntity::create();
     }
 }
