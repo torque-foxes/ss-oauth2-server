@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="Silverstripe">
-    <description>CodeSniffer ruleset for Silverstripe coding conventions.</description>
+<ruleset name="OAuth2 Server">
+    <description>CodeSniffer ruleset for OAuth2 Server.</description>
 
     <!-- Show progress and output sniff names on violation, add colours and run in parallel mode -->
     <arg value="p" />
@@ -8,7 +8,7 @@
     <arg value="s" />
     <arg name="parallel" value="10" />
 
-    <file>src</file>
+    <file>code</file>
     <file>tests</file>
 
     <!-- base rules are PSR-12 -->

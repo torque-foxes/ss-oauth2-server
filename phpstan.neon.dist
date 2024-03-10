@@ -3,5 +3,8 @@ includes:
 parameters:
     level: 8
     paths:
-        - src
+        - code
         - tests
+    ignoreErrors:
+        # Ignore configurable properties
+        - '#Static property .* is never read, only written#'

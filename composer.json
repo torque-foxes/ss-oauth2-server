@@ -35,7 +35,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "IanSimpson\\OAuth2\\": "src/"
+            "IanSimpson\\OAuth2\\": "code/"
         }
     },
     "autoload-dev": {
