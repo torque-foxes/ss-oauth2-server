@@ -3,512 +3,357 @@ parameters:
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Admin\\\\ClientAdmin\\:\\:\\$has_many type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Admin/ClientAdmin.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Admin\\\\ClientAdmin\\:\\:\\$has_many is never read, only written\\.$#"
-			count: 1
-			path: src/Admin/ClientAdmin.php
+			path: code/Admin/ClientAdmin.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Admin\\\\ScopeAdmin\\:\\:\\$has_many type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Admin/ScopeAdmin.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Admin\\\\ScopeAdmin\\:\\:\\$has_many is never read, only written\\.$#"
-			count: 1
-			path: src/Admin/ScopeAdmin.php
+			path: code/Admin/ScopeAdmin.php
 
 		-
 			message: "#^Access to an undefined property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$MemberID\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Access to an undefined property League\\\\OAuth2\\\\Server\\\\Entities\\\\ClientEntityInterface\\:\\:\\$ID\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Call to method DateTimeImmutable\\:\\:setTimestamp\\(\\) on a separate line has no effect\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:setScopes\\(\\) has parameter \\$scopes with no type specified\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Parameter \\#1 \\$item of method SilverStripe\\\\ORM\\\\ManyManyList\\:\\:add\\(\\) expects int\\|SilverStripe\\\\ORM\\\\DataObject, League\\\\OAuth2\\\\Server\\\\Entities\\\\ScopeEntityInterface given\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$Expiry \\(string\\) does not accept int\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$MemberID \\(int\\) does not accept int\\|string\\|null\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$db type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$has_one type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$many_many type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$db is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$has_one is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$many_many is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$table_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AccessTokenEntity.php
+			path: code/Entities/AccessTokenEntity.php
 
 		-
 			message: "#^Access to an undefined property League\\\\OAuth2\\\\Server\\\\Entities\\\\ClientEntityInterface\\:\\:\\$ID\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:setScopes\\(\\) has parameter \\$scopes with no type specified\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Parameter \\#1 \\$item of method SilverStripe\\\\ORM\\\\ManyManyList\\:\\:add\\(\\) expects int\\|SilverStripe\\\\ORM\\\\DataObject, League\\\\OAuth2\\\\Server\\\\Entities\\\\ScopeEntityInterface given\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$Expiry \\(string\\) does not accept int\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$MemberID \\(int\\) does not accept int\\|string\\|null\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$db type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$has_one type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$many_many type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Return type \\(DateTime\\) of method IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:getExpiryDateTime\\(\\) should be compatible with return type \\(DateTimeImmutable\\) of method League\\\\OAuth2\\\\Server\\\\Entities\\\\TokenInterface\\:\\:getExpiryDateTime\\(\\)$#"
 			count: 2
-			path: src/Entities/AuthCodeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$db is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AuthCodeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$has_one is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AuthCodeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$many_many is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AuthCodeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$table_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/AuthCodeEntity.php
+			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Access to an undefined property SilverStripe\\\\Core\\\\Config\\\\Config_ForClass\\:\\:\\$hash_iterations\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Access to an undefined property SilverStripe\\\\Core\\\\Config\\\\Config_ForClass\\:\\:\\$hash_method\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Cannot call method setDescription\\(\\) on SilverStripe\\\\Forms\\\\FormField\\|null\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Cannot call method setTitle\\(\\) on SilverStripe\\\\Forms\\\\FormField\\|null\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:isSecretValid\\(\\) has parameter \\$secret with no type specified\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:onBeforeWrite\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:populateDefaults\\(\\) should return SilverStripe\\\\ORM\\\\DataObject but return statement is missing\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:storeSafely\\(\\) has parameter \\$secret with no type specified\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Parameter \\#4 \\$iterations of function hash_pbkdf2 expects int, string given\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$db type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$has_one type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$indexes type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$summary_fields type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$db is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$has_one is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$hash_iterations is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$hash_method is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$indexes is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$plural_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$singular_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$summary_fields is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ClientEntity\\:\\:\\$table_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ClientEntity.php
+			path: code/Entities/ClientEntity.php
 
 		-
 			message: "#^Access to an undefined property League\\\\OAuth2\\\\Server\\\\Entities\\\\AccessTokenEntityInterface\\:\\:\\$ID\\.$#"
 			count: 1
-			path: src/Entities/RefreshTokenEntity.php
+			path: code/Entities/RefreshTokenEntity.php
 
 		-
 			message: "#^Call to method DateTimeImmutable\\:\\:setTimestamp\\(\\) on a separate line has no effect\\.$#"
 			count: 1
-			path: src/Entities/RefreshTokenEntity.php
+			path: code/Entities/RefreshTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\RefreshTokenEntity\\:\\:\\$Expiry \\(string\\) does not accept int\\.$#"
 			count: 1
-			path: src/Entities/RefreshTokenEntity.php
+			path: code/Entities/RefreshTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\RefreshTokenEntity\\:\\:\\$db type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/RefreshTokenEntity.php
+			path: code/Entities/RefreshTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\RefreshTokenEntity\\:\\:\\$has_one type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/RefreshTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\RefreshTokenEntity\\:\\:\\$db is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/RefreshTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\RefreshTokenEntity\\:\\:\\$has_one is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/RefreshTokenEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\RefreshTokenEntity\\:\\:\\$table_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/RefreshTokenEntity.php
+			path: code/Entities/RefreshTokenEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$db type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ScopeEntity.php
+			path: code/Entities/ScopeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$has_one type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ScopeEntity.php
+			path: code/Entities/ScopeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$indexes type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ScopeEntity.php
+			path: code/Entities/ScopeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$summary_fields type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$db is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$has_one is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$indexes is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$plural_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$singular_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$summary_fields is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\Entities\\\\ScopeEntity\\:\\:\\$table_name is never read, only written\\.$#"
-			count: 1
-			path: src/Entities/ScopeEntity.php
+			path: code/Entities/ScopeEntity.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\LogFactory\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/LogFactory.php
+			path: code/LogFactory.php
 
 		-
 			message: "#^Call to an undefined method League\\\\OAuth2\\\\Server\\\\ResourceServer\\:\\:respondToAccessTokenRequest\\(\\)\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Cannot call method fromPsr7\\(\\) on Robbie\\\\Psr7\\\\HttpResponseAdapter\\|null\\.$#"
 			count: 4
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Cannot call method getAttributes\\(\\) on Psr\\\\Http\\\\Message\\\\ServerRequestInterface\\|true\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:accessToken\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:authenticateRequest\\(\\) has parameter \\$controller with no type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:authorize\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:getMember\\(\\) should return bool\\|SilverStripe\\\\Security\\\\Member but returns SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:setServer\\(\\) has parameter \\$server with no type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:validateClientGrant\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^PHPDoc tag @return with type League\\\\OAuth2\\\\Server\\\\AuthorizationServer\\|League\\\\OAuth2\\\\Server\\\\ResourceServer is incompatible with native type IanSimpson\\\\OAuth2\\\\OauthServerController\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$allowed_actions type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myRepositories has no type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myRequest has no type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myResponse has no type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$server has no type specified\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$url_handlers type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Right side of \\|\\| is always false\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$allowed_actions is never read, only written\\.$#"
-			count: 1
-			path: src/OAuthServerController.php
-
-		-
-			message: "#^Static property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$url_handlers is never read, only written\\.$#"
-			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Variable \\$member in PHPDoc tag @var does not exist\\.$#"
 			count: 1
-			path: src/OAuthServerController.php
+			path: code/OauthServerController.php
 
 		-
 			message: "#^Cannot access property \\$Revoked on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 2
-			path: src/Repositories/AccessTokenRepository.php
+			path: code/Repositories/AccessTokenRepository.php
 
 		-
 			message: "#^Cannot call method write\\(\\) on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 1
-			path: src/Repositories/AccessTokenRepository.php
+			path: code/Repositories/AccessTokenRepository.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Repositories\\\\AccessTokenRepository\\:\\:getAccessToken\\(\\) has parameter \\$tokenId with no type specified\\.$#"
 			count: 1
-			path: src/Repositories/AccessTokenRepository.php
+			path: code/Repositories/AccessTokenRepository.php
 
 		-
 			message: "#^Cannot access property \\$Revoked on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 2
-			path: src/Repositories/AuthCodeRepository.php
+			path: code/Repositories/AuthCodeRepository.php
 
 		-
 			message: "#^Cannot call method write\\(\\) on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 1
-			path: src/Repositories/AuthCodeRepository.php
+			path: code/Repositories/AuthCodeRepository.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Repositories\\\\AuthCodeRepository\\:\\:getAuthCode\\(\\) has parameter \\$codeId with no type specified\\.$#"
 			count: 1
-			path: src/Repositories/AuthCodeRepository.php
+			path: code/Repositories/AuthCodeRepository.php
 
 		-
 			message: "#^Cannot access property \\$Revoked on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 2
-			path: src/Repositories/RefreshTokenRepository.php
+			path: code/Repositories/RefreshTokenRepository.php
 
 		-
 			message: "#^Cannot call method write\\(\\) on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 1
-			path: src/Repositories/RefreshTokenRepository.php
+			path: code/Repositories/RefreshTokenRepository.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Repositories\\\\RefreshTokenRepository\\:\\:getRefreshToken\\(\\) has parameter \\$tokenId with no type specified\\.$#"
 			count: 1
-			path: src/Repositories/RefreshTokenRepository.php
+			path: code/Repositories/RefreshTokenRepository.php
 
 		-
 			message: "#^Cannot call method Value\\(\\) on SilverStripe\\\\Forms\\\\FormField\\|null\\.$#"
