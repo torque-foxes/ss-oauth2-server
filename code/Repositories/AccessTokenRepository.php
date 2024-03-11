@@ -8,6 +8,8 @@
 namespace IanSimpson\OAuth2\Repositories;
 
 use IanSimpson\OAuth2\Entities\AccessTokenEntity;
+use IanSimpson\OAuth2\Entities\ClientEntity;
+use IanSimpson\OAuth2\Entities\ScopeEntity;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
@@ -57,7 +59,8 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param ClientEntity $clientEntity
+     * @param ScopeEntity[] $scopes
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): AccessTokenEntity
     {

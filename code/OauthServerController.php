@@ -7,6 +7,9 @@
 
 namespace IanSimpson\OAuth2;
 
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use DateInterval;
 use Exception;
@@ -29,6 +32,7 @@ use Robbie\Psr7\HttpRequestAdapter;
 use Robbie\Psr7\HttpResponseAdapter;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
@@ -41,18 +45,29 @@ class OauthServerController extends Controller
     /**
      * @var string default is 1 hour
      */
-    public static $grant_expiry_interval = 'PT1H';
+    public static string $grant_expiry_interval = 'PT1H';
 
     protected $server;
+
+    /**
+     * @var RequestInterface
+     */
     protected $myRequest;
+
+    /**
+     * @var ResponseInterface
+     */
     protected $myResponse;
 
     /**
      * @var LoggerInterface
      */
     protected $logger;
+
     private string $privateKey;
+
     private string $publicKey;
+
     private string $encryptionKey;
 
     private static array $allowed_actions = [
@@ -69,7 +84,9 @@ class OauthServerController extends Controller
     ];
 
     private ?HttpRequestAdapter $myRequestAdapter = null;
+
     private ?HttpResponseAdapter $myResponseAdapter = null;
+
     private $myRepositories;
 
     /**
@@ -220,7 +237,7 @@ class OauthServerController extends Controller
         return $this->myResponseAdapter->fromPsr7($this->myResponse);
     }
 
-    public function accessToken()
+    public function accessToken(): HTTPResponse
     {
         try {
             // Try to respond to the request
@@ -234,6 +251,7 @@ class OauthServerController extends Controller
             );
         }
 
+        /** @var HTTPResponse */
         return $this->myResponseAdapter->fromPsr7($this->myResponse);
     }
 
@@ -288,27 +306,19 @@ class OauthServerController extends Controller
         return $members->first();
     }
 
-    /**
-     * @return AuthorizationServer|ResourceServer
-     */
-    public function getServer()
+    public function getServer(): AuthorizationServer|ResourceServer
     {
         return $this->server;
     }
 
-    /**
-     * @param $server ResourceServer|AuthorizationServer
-     *
-     * @return AuthorizationServer|ResourceServer
-     */
-    public function setServer($server): self
+    public function setServer(ResourceServer|AuthorizationServer $server): self
     {
         $this->server = $server;
 
         return $this;
     }
 
-    public function validateClientGrant(HTTPRequest $request)
+    public function validateClientGrant(HTTPRequest $request): HTTPResponse|bool
     {
         $server = new ResourceServer(
             new AccessTokenRepository(),
@@ -325,12 +335,14 @@ class OauthServerController extends Controller
             // All instances of OAuthServerException can be formatted into a HTTP response
             $this->myResponse = $exception->generateHttpResponse($this->myResponse);
 
+            /** @var HTTPResponse */
             return $this->myResponseAdapter->fromPsr7($this->myResponse);
         } catch (Exception $exception) {
             $this->myResponse = $this->myResponse->withStatus(500)->withBody(
                 Utils::streamFor($exception->getMessage())
             );
 
+            /** @var HTTPResponse */
             return $this->myResponseAdapter->fromPsr7($this->myResponse);
         }
 

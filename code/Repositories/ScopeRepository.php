@@ -10,28 +10,25 @@ namespace IanSimpson\OAuth2\Repositories;
 use IanSimpson\OAuth2\Entities\ScopeEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use SilverStripe\ORM\DataObject;
 
 class ScopeRepository implements ScopeRepositoryInterface
 {
     /**
-     * {@inheritdoc}
+     * @return ScopeEntity|null
      */
-    public function getScopeEntityByIdentifier($scopeIdentifier): null|DataObject|ScopeEntity
+    public function getScopeEntityByIdentifier($scopeIdentifier)
     {
         $scopes = ScopeEntity::get()->filter([
             'ScopeIdentifier' => $scopeIdentifier,
         ]);
 
-        if (!count($scopes)) {
-            return null;
-        }
-
+        /** @var ScopeEntity|null */
         return $scopes->first();
     }
 
     /**
-     * {@inheritdoc}
+     * @param ScopeEntity[] $scopes
+     * @return ScopeEntity[]
      */
     public function finalizeScopes(
         array $scopes,

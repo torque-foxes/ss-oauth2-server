@@ -10,16 +10,19 @@ namespace IanSimpson\OAuth2\Repositories;
 use IanSimpson\OAuth2\Entities\AuthCodeEntity;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
-use SilverStripe\ORM\DataObject;
 
 class AuthCodeRepository implements AuthCodeRepositoryInterface
 {
-    public function getAuthCode($codeId): null|AuthCodeEntity|DataObject
+    /**
+     * @return AuthCodeEntity|null
+     */
+    public function getAuthCode($codeId)
     {
         $codes = AuthCodeEntity::get()->filter([
             'Code' => $codeId,
         ]);
 
+        /** @var AuthCodeEntity|null */
         return $codes->first();
     }
 
@@ -40,7 +43,12 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     public function revokeAuthCode($codeId): void
     {
         // Some logic to revoke the auth code in a database
-        $code          = $this->getAuthCode($codeId);
+        $code = $this->getAuthCode($codeId);
+
+        if (!$code instanceof AuthCodeEntity) {
+            return;
+        }
+
         $code->Revoked = true;
         $code->write();
     }
@@ -51,6 +59,10 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
     public function isAuthCodeRevoked($codeId): bool
     {
         $code = $this->getAuthCode($codeId);
+
+        if (!$code instanceof AuthCodeEntity) {
+            return true;
+        }
 
         return (bool) $code->Revoked;
     }

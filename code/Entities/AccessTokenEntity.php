@@ -79,12 +79,16 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this->ScopeEntities()->toArray();
     }
 
-    public function getClient(): null|ClientEntity|DataObject
+    /**
+     * @return ClientEntity|null
+     */
+    public function getClient()
     {
         $clients = ClientEntity::get()->filter([
             'ID' => $this->ClientID,
         ]);
 
+        /** @var ClientEntity|null */
         return $clients->first();
     }
 
@@ -109,6 +113,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this;
     }
 
+    /**
+     * @param ScopeEntity $scope
+     */
     public function addScope(ScopeEntityInterface $scope): self
     {
         $this->ScopeEntities()->add($scope);
@@ -116,6 +123,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this;
     }
 
+    /**
+     * @param ScopeEntity[] $scopes
+     */
     public function setScopes($scopes): self
     {
         $this->ScopeEntities()->removeall();
@@ -126,6 +136,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this;
     }
 
+    /**
+     * @param ClientEntity $client
+     */
     public function setClient(ClientEntityInterface $client): self
     {
         $this->ClientID = $client->ID;
