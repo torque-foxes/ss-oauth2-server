@@ -34,7 +34,7 @@ class ClientEntityTest extends SapphireTest
 
     public function testValidatePass(): void
     {
-        $this->markTestIncomplete('No assertions.');
+        $this->expectNotToPerformAssertions();
 
         $e = ClientEntity::create();
         $e->populateDefaults();
