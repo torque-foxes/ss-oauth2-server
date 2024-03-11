@@ -105,6 +105,9 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this;
     }
 
+    /**
+     * @param ScopeEntity $scope
+     */
     public function addScope(ScopeEntityInterface $scope): self
     {
         $this->ScopeEntities()->add($scope);
@@ -112,6 +115,9 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this;
     }
 
+    /**
+     * @param ScopeEntity[] $scopes
+     */
     public function setScopes($scopes): self
     {
         $this->ScopeEntities()->removeAll();
@@ -122,6 +128,9 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this;
     }
 
+    /**
+     * @param ClientEntity $client
+     */
     public function setClient(ClientEntityInterface $client): self
     {
         $this->ClientID = $client->ID;

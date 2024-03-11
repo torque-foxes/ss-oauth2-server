@@ -10,16 +10,19 @@ namespace IanSimpson\OAuth2\Repositories;
 use IanSimpson\OAuth2\Entities\RefreshTokenEntity;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use SilverStripe\ORM\DataObject;
 
 class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {
-    public function getRefreshToken($tokenId): null|DataObject|RefreshTokenEntity
+    /**
+     * @return RefreshTokenEntity|null
+     */
+    public function getRefreshToken($tokenId)
     {
         $clients = RefreshTokenEntity::get()->filter([
             'Code' => $tokenId,
         ]);
 
+        /** @var RefreshTokenEntity|null */
         return $clients->first();
     }
 
@@ -41,6 +44,11 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     {
         // Some logic to revoke the refresh token in a database
         $token          = $this->getRefreshToken($tokenId);
+
+        if (!$token instanceof RefreshTokenEntity) {
+            return;
+        }
+
         $token->Revoked = true;
         $token->write();
     }
@@ -51,6 +59,10 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     public function isRefreshTokenRevoked($tokenId): bool
     {
         $token = $this->getRefreshToken($tokenId);
+
+        if (!$token instanceof RefreshTokenEntity) {
+            return true;
+        }
 
         return (bool) $token->Revoked;
     }

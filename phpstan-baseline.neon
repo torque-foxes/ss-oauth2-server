@@ -16,22 +16,7 @@ parameters:
 			path: code/Entities/AccessTokenEntity.php
 
 		-
-			message: "#^Access to an undefined property League\\\\OAuth2\\\\Server\\\\Entities\\\\ClientEntityInterface\\:\\:\\$ID\\.$#"
-			count: 1
-			path: code/Entities/AccessTokenEntity.php
-
-		-
 			message: "#^Call to method DateTimeImmutable\\:\\:setTimestamp\\(\\) on a separate line has no effect\\.$#"
-			count: 1
-			path: code/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:setScopes\\(\\) has parameter \\$scopes with no type specified\\.$#"
-			count: 1
-			path: code/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Parameter \\#1 \\$item of method SilverStripe\\\\ORM\\\\ManyManyList\\:\\:add\\(\\) expects int\\|SilverStripe\\\\ORM\\\\DataObject, League\\\\OAuth2\\\\Server\\\\Entities\\\\ScopeEntityInterface given\\.$#"
 			count: 1
 			path: code/Entities/AccessTokenEntity.php
 
@@ -59,21 +44,6 @@ parameters:
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AccessTokenEntity\\:\\:\\$many_many type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: code/Entities/AccessTokenEntity.php
-
-		-
-			message: "#^Access to an undefined property League\\\\OAuth2\\\\Server\\\\Entities\\\\ClientEntityInterface\\:\\:\\$ID\\.$#"
-			count: 1
-			path: code/Entities/AuthCodeEntity.php
-
-		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:setScopes\\(\\) has parameter \\$scopes with no type specified\\.$#"
-			count: 1
-			path: code/Entities/AuthCodeEntity.php
-
-		-
-			message: "#^Parameter \\#1 \\$item of method SilverStripe\\\\ORM\\\\ManyManyList\\:\\:add\\(\\) expects int\\|SilverStripe\\\\ORM\\\\DataObject, League\\\\OAuth2\\\\Server\\\\Entities\\\\ScopeEntityInterface given\\.$#"
-			count: 1
-			path: code/Entities/AuthCodeEntity.php
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\Entities\\\\AuthCodeEntity\\:\\:\\$Expiry \\(string\\) does not accept int\\.$#"
@@ -171,11 +141,6 @@ parameters:
 			path: code/Entities/ClientEntity.php
 
 		-
-			message: "#^Access to an undefined property League\\\\OAuth2\\\\Server\\\\Entities\\\\AccessTokenEntityInterface\\:\\:\\$ID\\.$#"
-			count: 1
-			path: code/Entities/RefreshTokenEntity.php
-
-		-
 			message: "#^Call to method DateTimeImmutable\\:\\:setTimestamp\\(\\) on a separate line has no effect\\.$#"
 			count: 1
 			path: code/Entities/RefreshTokenEntity.php
@@ -236,11 +201,6 @@ parameters:
 			path: code/OauthServerController.php
 
 		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:accessToken\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:authenticateRequest\\(\\) has parameter \\$controller with no type specified\\.$#"
 			count: 1
 			path: code/OauthServerController.php
@@ -256,21 +216,6 @@ parameters:
 			path: code/OauthServerController.php
 
 		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:setServer\\(\\) has parameter \\$server with no type specified\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:validateClientGrant\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^PHPDoc tag @return with type League\\\\OAuth2\\\\Server\\\\AuthorizationServer\\|League\\\\OAuth2\\\\Server\\\\ResourceServer is incompatible with native type IanSimpson\\\\OAuth2\\\\OauthServerController\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$allowed_actions type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: code/OauthServerController.php
@@ -281,12 +226,12 @@ parameters:
 			path: code/OauthServerController.php
 
 		-
-			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myRequest has no type specified\\.$#"
+			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myRequest \\(Psr\\\\Http\\\\Message\\\\RequestInterface\\) does not accept Psr\\\\Http\\\\Message\\\\MessageInterface\\.$#"
 			count: 1
 			path: code/OauthServerController.php
 
 		-
-			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myResponse has no type specified\\.$#"
+			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myResponse \\(Psr\\\\Http\\\\Message\\\\ResponseInterface\\) does not accept Psr\\\\Http\\\\Message\\\\MessageInterface\\.$#"
 			count: 1
 			path: code/OauthServerController.php
 
@@ -326,29 +271,9 @@ parameters:
 			path: code/Repositories/AccessTokenRepository.php
 
 		-
-			message: "#^Cannot access property \\$Revoked on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
-			count: 2
-			path: code/Repositories/AuthCodeRepository.php
-
-		-
-			message: "#^Cannot call method write\\(\\) on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
-			count: 1
-			path: code/Repositories/AuthCodeRepository.php
-
-		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Repositories\\\\AuthCodeRepository\\:\\:getAuthCode\\(\\) has parameter \\$codeId with no type specified\\.$#"
 			count: 1
 			path: code/Repositories/AuthCodeRepository.php
-
-		-
-			message: "#^Cannot access property \\$Revoked on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
-			count: 2
-			path: code/Repositories/RefreshTokenRepository.php
-
-		-
-			message: "#^Cannot call method write\\(\\) on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
-			count: 1
-			path: code/Repositories/RefreshTokenRepository.php
 
 		-
 			message: "#^Method IanSimpson\\\\OAuth2\\\\Repositories\\\\RefreshTokenRepository\\:\\:getRefreshToken\\(\\) has parameter \\$tokenId with no type specified\\.$#"
