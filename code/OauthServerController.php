@@ -7,7 +7,6 @@
 
 namespace IanSimpson\OAuth2;
 
-use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -16,6 +15,7 @@ use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Utils;
 use IanSimpson\OAuth2\Entities\UserEntity;
+use IanSimpson\OAuth2\Entities\ClientEntity;
 use IanSimpson\OAuth2\Repositories\AccessTokenRepository;
 use IanSimpson\OAuth2\Repositories\AuthCodeRepository;
 use IanSimpson\OAuth2\Repositories\ClientRepository;
@@ -39,6 +39,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
+use Throwable;
 
 class OauthServerController extends Controller
 {
@@ -87,7 +88,10 @@ class OauthServerController extends Controller
 
     private ?HttpResponseAdapter $myResponseAdapter = null;
 
-    private $myRepositories;
+    /**
+     * @var array{client: ClientRepository, scope: ScopeRepository, accessToken: AccessTokenRepository, authCode: AuthCodeRepository, refreshToken: RefreshTokenRepository}
+     */
+    private array $myRepositories;
 
     /**
      * @throws Exception
@@ -176,16 +180,18 @@ class OauthServerController extends Controller
         return parent::handleRequest($request);
     }
 
-    public function authorize()
+    public function authorize(): HTTPResponse
     {
         try {
             // Validate the HTTP request and return an AuthorizationRequest object.
             $authRequest = $this->server->validateAuthorizationRequest($this->myRequest);
+
+            /** @var ClientEntity $client */
             $client      = $authRequest->getClient();
             $member      = Security::getCurrentUser();
 
             // The auth request object can be serialized and saved into a user's session.
-            if (!$member || !$member->exists()) {
+            if (!$member instanceof Member || !$member->exists()) {
                 // You will probably want to redirect the user at this point to a login endpoint.
 
                 Security::singleton()->setSessionMessage(
@@ -234,6 +240,7 @@ class OauthServerController extends Controller
             );
         }
 
+        /** @var HTTPResponse */
         return $this->myResponseAdapter->fromPsr7($this->myResponse);
     }
 
@@ -256,30 +263,27 @@ class OauthServerController extends Controller
     }
 
     /**
-     * @param $controller
-     *
-     * @return bool|ServerRequestInterface
+     * @param mixed $controller
      */
-    public static function authenticateRequest($controller)
+    public static function authenticateRequest($controller): ?ServerRequestInterface
     {
         $publicKey = self::getKey('OAUTH_PUBLIC_KEY_PATH');
 
-        // Muting errors with @ to stop notice about key permissions
         $server = new ResourceServer(
             new AccessTokenRepository(),
             $publicKey
         );
-        $request = ServerRequest::fromGlobals();
-        $auth    = $request->getHeader('HTTP_AUTHORIZATION');
 
-        if (($auth || sizeof($auth)) && isset($_SERVER['HTTP_AUTHORIZATION'])) {
-            $request = $request->withAddedHeader('HTTP_AUTHORIZATION', $_SERVER['HTTP_AUTHORIZATION']);
+        $request = ServerRequest::fromGlobals();
+
+        if (!$request->hasHeader('authorization') && isset($_SERVER['AUTHORIZATION'])) {
+            $request = $request->withAddedHeader('authorization', $_SERVER['AUTHORIZATION']);
         }
 
         try {
-            $request = $server->respondToAccessTokenRequest($request);
-        } catch (Exception $exception) {
-            return false;
+            $request = $server->validateAuthenticatedRequest($request);
+        } catch (Throwable) {
+            return null;
         }
 
         return $request;
@@ -287,22 +291,20 @@ class OauthServerController extends Controller
 
     /**
      * @param mixed $controller
-     *
-     * @return bool|Member
      */
-    public static function getMember($controller)
+    public static function getMember($controller): ?Member
     {
         $request = self::authenticateRequest($controller);
 
-        if (!$request) {
-            return false;
+        if (!$request instanceof ServerRequestInterface) {
+            return null;
         }
 
         $members = Member::get()->filter([
             'ID' => $request->getAttributes()['oauth_user_id'],
         ]);
 
-        /** @var Member $member */
+        /** @var Member */
         return $members->first();
     }
 

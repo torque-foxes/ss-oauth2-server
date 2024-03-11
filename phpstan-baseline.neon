@@ -186,42 +186,12 @@ parameters:
 			path: code/LogFactory.php
 
 		-
-			message: "#^Call to an undefined method League\\\\OAuth2\\\\Server\\\\ResourceServer\\:\\:respondToAccessTokenRequest\\(\\)\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
 			message: "#^Cannot call method fromPsr7\\(\\) on Robbie\\\\Psr7\\\\HttpResponseAdapter\\|null\\.$#"
 			count: 4
 			path: code/OauthServerController.php
 
 		-
-			message: "#^Cannot call method getAttributes\\(\\) on Psr\\\\Http\\\\Message\\\\ServerRequestInterface\\|true\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:authenticateRequest\\(\\) has parameter \\$controller with no type specified\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:authorize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Method IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:getMember\\(\\) should return bool\\|SilverStripe\\\\Security\\\\Member but returns SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$allowed_actions type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$myRepositories has no type specified\\.$#"
 			count: 1
 			path: code/OauthServerController.php
 
@@ -242,16 +212,6 @@ parameters:
 
 		-
 			message: "#^Property IanSimpson\\\\OAuth2\\\\OauthServerController\\:\\:\\$url_handlers type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Right side of \\|\\| is always false\\.$#"
-			count: 1
-			path: code/OauthServerController.php
-
-		-
-			message: "#^Variable \\$member in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: code/OauthServerController.php
 
@@ -291,42 +251,12 @@ parameters:
 			path: tests/ClientEntityTest.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: tests/ClientEntityTest.php
-
-		-
-			message: "#^Access to an undefined property SilverStripe\\\\ORM\\\\DataObject\\:\\:\\$ClientIdentifier\\.$#"
-			count: 3
-			path: tests/OauthServerControllerTest.php
-
-		-
-			message: "#^Access to an undefined property SilverStripe\\\\ORM\\\\DataObject\\:\\:\\$Code\\.$#"
-			count: 1
-			path: tests/OauthServerControllerTest.php
-
-		-
-			message: "#^Call to an undefined method Lcobucci\\\\JWT\\\\Token\\:\\:claims\\(\\)\\.$#"
-			count: 1
-			path: tests/OauthServerControllerTest.php
-
-		-
 			message: "#^Cannot access property \\$Code on SilverStripe\\\\ORM\\\\DataObject\\|null\\.$#"
 			count: 1
 			path: tests/OauthServerControllerTest.php
 
 		-
-			message: "#^Method IanSimpson\\\\Tests\\\\OauthServerControllerTest\\:\\:tokenGetClaims\\(\\) is unused\\.$#"
-			count: 1
-			path: tests/OauthServerControllerTest.php
-
-		-
-			message: "#^Method IanSimpson\\\\Tests\\\\OauthServerControllerTest\\:\\:tokenGetClaims\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/OauthServerControllerTest.php
-
-		-
-			message: "#^Method IanSimpson\\\\Tests\\\\OauthServerControllerTest\\:\\:tokenIsOk\\(\\) is unused\\.$#"
+			message: "#^Parameter \\#1 \\$audience of class Lcobucci\\\\JWT\\\\Validation\\\\Constraint\\\\PermittedFor constructor expects non\\-empty\\-string, string given\\.$#"
 			count: 1
 			path: tests/OauthServerControllerTest.php
 
@@ -336,8 +266,8 @@ parameters:
 			path: tests/OauthServerControllerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$jwt of method Lcobucci\\\\JWT\\\\Parser\\:\\:parse\\(\\) expects non\\-empty\\-string, string given\\.$#"
-			count: 3
+			message: "#^Parameter \\#1 \\$id of method Lcobucci\\\\JWT\\\\Builder\\:\\:identifiedBy\\(\\) expects non\\-empty\\-string, string given\\.$#"
+			count: 1
 			path: tests/OauthServerControllerTest.php
 
 		-
@@ -351,11 +281,11 @@ parameters:
 			path: tests/OauthServerControllerTest.php
 
 		-
-			message: "#^Property IanSimpson\\\\Tests\\\\OauthServerControllerTest\\:\\:\\$fixture_file type has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\.\\.\\.\\$audiences of method Lcobucci\\\\JWT\\\\Builder\\:\\:permittedFor\\(\\) expects non\\-empty\\-string, string given\\.$#"
 			count: 1
 			path: tests/OauthServerControllerTest.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 2
+			message: "#^Property IanSimpson\\\\Tests\\\\OauthServerControllerTest\\:\\:\\$fixture_file type has no value type specified in iterable type array\\.$#"
+			count: 1
 			path: tests/OauthServerControllerTest.php
