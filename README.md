@@ -1,6 +1,6 @@
 # OAuth2 Server
 
-## Introduction
+## Introduction 👋
 
 This allows your Silverstripe site to be in OAuth 2.0 provider.
 
@@ -11,12 +11,12 @@ It supports the following grants:
  * Authorization code grant
  * Refresh grant
 
-## Requirements
+## Requirements 🦺
 
  * PHP ^8.1
- * SilverStripe ^4.13
+ * Silverstripe ^4.13
 
-## Installation
+## Installation 👷‍♀️
 
 Install the add-on with Composer:
 
@@ -41,18 +41,17 @@ Generate encryption key:
 php -r 'echo base64_encode(random_bytes(32)), PHP_EOL;'
 ```
 
-Add the following lines in your `mysite/_config/config.yml`, updating the privateKey and publicKey to point to the key files (relative to the SilverStripe root), and adding the encryption key you have just generated:
+Add the following lines in your `.env`, updating the `OAUTH_PRIVATE_KEY_PATH` and `OAUTH_PUBLIC_KEY_PATH` to point to the key files, and adding the encryption key you have just generated:
 
-```yaml
-IanSimpson\OAuth2\OauthServerController:
-  privateKey: '../private.key'
-  publicKey: '../public.key'
-  encryptionKey: 'l4kZ/YXA1HJp7vLjB7IeDsIR3GEy6Kojfr+N+UalwkU= # example only, generate your own.'
+```env
+OAUTH_PRIVATE_KEY_PATH="/path/to/my/private.key"
+OAUTH_PUBLIC_KEY_PATH="/path/to/my/public.key"
+OAUTH_ENCRYPTION_KEY="my-encryption-key"
 ```
 
 Finally, after doing a `/dev/build/` go into your site settings and on the OAuth Configuration and add a new Client. Using this you should now be able to generate a key at `/oauth/authorize`, per the OAuth 2.0 spec (https://tools.ietf.org/html/rfc6749).
 
-## Usage
+## Usage 🏃🏃🏃
 
 To verify the Authorization header being submitted is correct, add this to your Controller:
 
@@ -60,4 +59,4 @@ To verify the Authorization header being submitted is correct, add this to your 
 $member = IanSimpson\OAuth2\OauthServerController::getMember($this);
 ```
 
-it will return a Member object if the Authorization header is correct, or false if there's an error. Simple!
+it will return a Member object if the Authorization header is correct, or null if there's an error. Simple!
