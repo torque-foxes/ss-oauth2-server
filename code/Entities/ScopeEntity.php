@@ -25,6 +25,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
     private static string $table_name = 'OAuth_ScopeEntity';
 
     private static string $singular_name = 'OAuth Scope';
+
     private static string $plural_name   = 'OAuth Scopes';
 
     private static array $db = [

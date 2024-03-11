@@ -9,6 +9,7 @@ namespace IanSimpson\OAuth2\Entities;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\Traits\ClientTrait;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationResult;
@@ -16,8 +17,8 @@ use SilverStripe\Security\RandomGenerator;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
- * @property string $ClientName
- * @property string $ClientRedirectUri
+ * @property ?string $ClientName
+ * @property ?string $ClientRedirectUri
  * @property string $ClientIdentifier
  * @property string $ClientSecret
  * @property string $HashedClientSecret
@@ -74,7 +75,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         ],
     ];
 
-    public function getCMSFields()
+    public function getCMSFields(): FieldList
     {
         $fields = parent::getCMSFields();
         $fields->removeFieldFromTab('Root', 'ClientSecretSalt');
@@ -144,7 +145,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         $this->HashedClientSecret = mb_substr((new RandomGenerator())->randomToken(), 0, 64);
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         // Overwrite the HashedClientSecret property with the hashed value if needed.
         if (!$this->ID && !empty(trim((string) $this->HashedClientSecret))) {
