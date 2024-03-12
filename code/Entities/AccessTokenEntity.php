@@ -22,8 +22,8 @@ use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Member;
 
 /**
- * @property string $Code
- * @property string $Expiry
+ * @property ?string $Code
+ * @property int $Expiry
  * @property bool $Revoked
  * @property int $ClientID
  * @property int $MemberID
@@ -72,9 +72,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         'ScopeEntities' => ScopeEntity::class,
     ];
 
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
-        return $this->Code;
+        return (string) $this->Code;
     }
 
     /**
@@ -82,10 +82,8 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
      */
     public function getExpiryDateTime(): DateTimeImmutable
     {
-        $date = new DateTimeImmutable();
-        $date->setTimestamp((int) $this->Expiry);
-
-        return $date->add(new DateInterval(OauthServerController::getGrantTypeExpiryInterval()));
+        return (new DateTimeImmutable())->setTimestamp((int) $this->Expiry)
+            ->add(new DateInterval(OauthServerController::getGrantTypeExpiryInterval()));
     }
 
     public function getUserIdentifier(): string
@@ -111,9 +109,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $clients->first();
     }
 
-    public function setIdentifier($code): self
+    public function setIdentifier(mixed $code): self
     {
-        $this->Code = $code;
+        $this->Code = (string) $code;
 
         return $this;
     }
@@ -125,9 +123,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this;
     }
 
-    public function setUserIdentifier($id): self
+    public function setUserIdentifier(mixed $id): self
     {
-        $this->MemberID = $id;
+        $this->MemberID = (int) $id;
 
         return $this;
     }
