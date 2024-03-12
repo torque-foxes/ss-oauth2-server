@@ -7,8 +7,8 @@
 
 namespace IanSimpson\OAuth2\Entities;
 
-use DateTime;
 use DateTimeImmutable;
+use Exception;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -20,13 +20,14 @@ use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Member;
 
 /**
- * @property string $Code
- * @property string $Expiry
- * @property bool $Revoked
- * @property int $ClientID
- * @property int $MemberID
- * @method ClientEntity Client()
- * @method Member Member()
+ * @property ?string $Code
+ * @property int     $Expiry
+ * @property bool    $Revoked
+ * @property int     $ClientID
+ * @property int     $MemberID
+ *
+ * @method ClientEntity               Client()
+ * @method Member                     Member()
  * @method ManyManyList|ScopeEntity[] ScopeEntities()
  */
 class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
@@ -35,15 +36,14 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
     use TokenEntityTrait;
     use AuthCodeTrait;
 
-
     /**
      * @config
      */
     private static string $table_name = 'OAuth_AuthCodeEntity';
 
-
     /**
      * @var array|string[]
+     *
      * @config
      */
     private static array $db = [
@@ -52,9 +52,9 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         'Revoked' => 'Boolean',
     ];
 
-
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $has_one = [
@@ -64,6 +64,7 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
 
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $many_many = [
@@ -75,12 +76,9 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return (string) $this->Code;
     }
 
-    public function getExpiryDateTime(): DateTime
+    public function getExpiryDateTime(): DateTimeImmutable
     {
-        $date = new DateTime();
-        $date->setTimestamp((int) $this->Expiry);
-
-        return $date;
+        return (new DateTimeImmutable())->setTimestamp((int) $this->Expiry);
     }
 
     public function getUserIdentifier(): int
@@ -102,9 +100,9 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $clients->first();
     }
 
-    public function setIdentifier($code): self
+    public function setIdentifier(mixed $code): self
     {
-        $this->Code = $code;
+        $this->Code = (string) $code;
 
         return $this;
     }
@@ -116,18 +114,19 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this;
     }
 
-    public function setUserIdentifier($id): self
+    public function setUserIdentifier(mixed $id): self
     {
-        $this->MemberID = $id;
+        $this->MemberID = (int) $id;
 
         return $this;
     }
 
     /**
-     * @param ScopeEntity $scope
+     * @throws Exception
      */
     public function addScope(ScopeEntityInterface $scope): self
     {
+        assert($scope instanceof ScopeEntity);
         $this->ScopeEntities()->add($scope);
 
         return $this;
