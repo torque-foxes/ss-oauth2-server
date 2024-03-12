@@ -37,18 +37,37 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
     use TokenEntityTrait;
     use EntityTrait;
 
+
+    /**
+     * @config
+     */
     private static string $table_name = 'OAuth_AccessTokenEntity';
 
+
+    /**
+     * @var array|string[]
+     * @config
+     */
     private static array $db = [
         'Code'    => 'Text',
         'Expiry'  => 'Datetime',
         'Revoked' => 'Boolean',
     ];
 
+
+    /**
+     * @var array|string[]
+     * @config
+     */
     private static array $has_one = [
         'Client' => ClientEntity::class,
     ];
 
+
+    /**
+     * @var array|string[]
+     * @config
+     */
     private static array $many_many = [
         'ScopeEntities' => ScopeEntity::class,
     ];

@@ -23,6 +23,7 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Member;
+use Exception;
 
 /**
  * @internal
@@ -31,6 +32,9 @@ class OauthServerControllerTest extends FunctionalTest
 {
     use CryptTrait;
 
+    /**
+     * @var string
+     */
     protected static $fixture_file = 'OauthServerControllerTest.yml';
 
     protected $autoFollowRedirection = false;
@@ -62,11 +66,16 @@ class OauthServerControllerTest extends FunctionalTest
         Environment::putEnv('OAUTH_PRIVATE_KEY_PATH=' . $privateKey);
         Environment::putEnv('OAUTH_ENCRYPTION_KEY=' . $encryptionKey);
 
+        $privateKeyContent = (string) file_get_contents($privateKey);
+        if (!$privateKeyContent) {
+            throw new Exception('Unable to read private key content');
+        }
+
         $this->setEncryptionKey($encryptionKey);
 
         $this->configuration = Configuration::forSymmetricSigner(
             new Sha256(),
-            InMemory::plainText(file_get_contents($privateKey))
+            InMemory::plainTextContent($privateKeyContent)
         );
 
         chmod($publicKey, 0600);
@@ -86,6 +95,9 @@ class OauthServerControllerTest extends FunctionalTest
         parent::tearDown();
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function testAuthorize(): void
     {
         $state = '789';
@@ -127,13 +139,16 @@ class OauthServerControllerTest extends FunctionalTest
         $this->assertSame($query['state'], $state);
 
         // Have a look inside payload too.
-        $payload        = json_decode($this->decrypt($query['code']), true);
+        $payload        = json_decode((string)$this->decrypt($query['code']), true, 512, JSON_THROW_ON_ERROR);
         $authCodeEntity = AuthCodeEntity::get()->filter('Code', $payload['auth_code_id'])->first();
         $this->assertSame($payload['client_id'], $c->ClientIdentifier);
         $this->assertSame($payload['user_id'], $m->ID);
         $this->assertNotNull($authCodeEntity);
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function testAccessToken(): void
     {
         $redir = 'http://client/callback';
@@ -159,7 +174,7 @@ class OauthServerControllerTest extends FunctionalTest
             'code_challenge_method' => null,
         ];
 
-        $authCode = $this->encrypt(json_encode($payload));
+        $authCode = $this->encrypt(json_encode($payload, JSON_THROW_ON_ERROR));
 
         $resp = $this->post('http://localhost/oauth/access_token', [
             'client_id' => $c->ClientIdentifier,
@@ -174,7 +189,7 @@ class OauthServerControllerTest extends FunctionalTest
 
         $this->assertSame(200, $resp->getStatusCode());
 
-        $payload = json_decode($resp->getBody(), true);
+        $payload = json_decode($resp->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertIsInt($payload['expires_in']);
         $this->assertIsString($payload['access_token']);
@@ -193,6 +208,9 @@ class OauthServerControllerTest extends FunctionalTest
         $this->assertTrue($this->configuration->validator()->validate($token, ...$constraints));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testAuthenticateRequest(): void
     {
         /** @var ClientEntity $c */
@@ -231,7 +249,7 @@ class OauthServerControllerTest extends FunctionalTest
     public function testGetGrantTypeExpiryInterval(): void
     {
         $oauthController = OauthServerController::singleton();
-        $oauthController->config()->update('grant_expiry_interval', 'PT1H');
+        OauthServerController::config()->merge('grant_expiry_interval', 'PT1H');
         $this->assertSame('PT1H', $oauthController::getGrantTypeExpiryInterval());
     }
 }

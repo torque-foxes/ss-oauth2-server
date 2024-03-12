@@ -43,7 +43,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     public function revokeRefreshToken($tokenId): void
     {
         // Some logic to revoke the refresh token in a database
-        $token          = $this->getRefreshToken($tokenId);
+        $token          = $this->getRefreshToken((string) $tokenId);
 
         if (!$token instanceof RefreshTokenEntity) {
             return;
@@ -58,7 +58,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
      */
     public function isRefreshTokenRevoked($tokenId): bool
     {
-        $token = $this->getRefreshToken($tokenId);
+        $token = $this->getRefreshToken((string) $tokenId);
 
         if (!$token instanceof RefreshTokenEntity) {
             return true;

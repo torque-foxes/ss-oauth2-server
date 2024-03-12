@@ -22,6 +22,10 @@ use SilverStripe\SiteConfig\SiteConfig;
  */
 class ScopeAdmin extends DataExtension
 {
+    /**
+     * @var array|string[]
+     * @config
+     */
     private static array $has_many = [
         'Scopes' => ScopeEntity::class,
     ];

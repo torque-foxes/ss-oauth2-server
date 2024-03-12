@@ -35,19 +35,37 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
     use TokenEntityTrait;
     use AuthCodeTrait;
 
+
+    /**
+     * @config
+     */
     private static string $table_name = 'OAuth_AuthCodeEntity';
 
+
+    /**
+     * @var array|string[]
+     * @config
+     */
     private static array $db = [
         'Code'    => 'Text',
         'Expiry'  => 'Datetime',
         'Revoked' => 'Boolean',
     ];
 
+
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $has_one = [
         'Client' => ClientEntity::class,
         'Member' => Member::class,
     ];
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $many_many = [
         'ScopeEntities' => ScopeEntity::class,
     ];
