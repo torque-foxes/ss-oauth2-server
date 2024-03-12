@@ -22,25 +22,50 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
 {
     use EntityTrait;
 
+    /**
+     * @config
+     */
     private static string $table_name = 'OAuth_ScopeEntity';
 
+    /**
+     * @config
+     */
     private static string $singular_name = 'OAuth Scope';
 
+    /**
+     * @config
+     */
     private static string $plural_name   = 'OAuth Scopes';
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $db = [
         'ScopeIdentifier'  => 'Varchar(32)',
         'ScopeDescription' => 'Text',
     ];
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $has_one = [
         'SiteConfig' => SiteConfig::class,
     ];
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $summary_fields = [
         'ScopeIdentifier',
     ];
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $indexes = [
         'ScopeIdentifier' => [
             'type'    => 'index',

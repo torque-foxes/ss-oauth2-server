@@ -26,14 +26,25 @@ class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterfa
     use RefreshTokenTrait;
     use EntityTrait;
 
+    /**
+     * @config
+     */
     private static string $table_name = 'OAuth_RefreshTokenEntity';
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $db = [
         'Code'    => 'Text',
         'Expiry'  => 'Datetime',
         'Revoked' => 'Boolean',
     ];
 
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $has_one = [
         'AccessToken' => AccessTokenEntity::class,
     ];

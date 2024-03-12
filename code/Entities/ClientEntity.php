@@ -33,16 +33,41 @@ class ClientEntity extends DataObject implements ClientEntityInterface
 {
     use ClientTrait;
 
+
+    /**
+     * @config
+     */
     private static string $hash_method = 'sha512';
 
+
+    /**
+     * @config
+     */
     private static int $hash_iterations = 20000;
 
+
+    /**
+     * @config
+     */
     private static string $table_name = 'OAuth_ClientEntity';
 
+
+    /**
+     * @config
+     */
     private static string $singular_name = 'OAuth Client';
 
+
+    /**
+     * @config
+     */
     private static string $plural_name = 'OAuth Clients';
 
+
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $db = [
         'ClientName'                 => 'Varchar(100)',
         'ClientRedirectUri'          => 'Varchar(100)',
@@ -55,15 +80,30 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         'ClientConfidential'         => 'Boolean',
     ];
 
+
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $has_one = [
         'SiteConfig' => SiteConfig::class,
     ];
 
+
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $summary_fields = [
         'ClientName',
         'ClientIdentifier',
     ];
 
+
+    /**
+     * @config
+     * @var array|string[]
+     */
     private static array $indexes = [
         'ClientIdentifier' => [
             'type'    => 'index',

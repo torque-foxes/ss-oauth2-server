@@ -71,12 +71,22 @@ class OauthServerController extends Controller
 
     private string $encryptionKey;
 
+    /**
+     *
+     * @var array|string[]
+     * @config
+     */
     private static array $allowed_actions = [
         'authorize',
         'accessToken',
         'validateClientGrant',
     ];
 
+    /**
+     *
+     * @var array|string[]
+     * @config
+     */
     private static array $url_handlers = [
         'authorize'         => 'authorize',
         'access_token'      => 'accessToken',
