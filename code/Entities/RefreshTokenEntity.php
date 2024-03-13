@@ -60,16 +60,11 @@ class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterfa
     }
 
     /**
-     * @return AccessTokenEntity|null
+     * @return AccessTokenEntity
      */
-    public function getAccessToken()
+    public function getAccessToken(): AccessTokenEntityInterface
     {
-        $accessTokens = AccessTokenEntity::get()->filter([
-            'ID' => $this->AccessTokenID,
-        ]);
-
-        /** @var AccessTokenEntity|null */
-        return $accessTokens->first();
+        return $this->AccessToken();
     }
 
     public function setIdentifier($code): self
@@ -86,12 +81,11 @@ class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterfa
         return $this;
     }
 
-    /**
-     * @param AccessTokenEntity $accessToken
-     */
     public function setAccessToken(AccessTokenEntityInterface $accessToken): self
     {
-        $this->AccessTokenID = $accessToken->ID;
+        if ($accessToken instanceof AccessTokenEntity) {
+            $this->AccessTokenID = $accessToken->ID;
+        }
 
         return $this;
     }

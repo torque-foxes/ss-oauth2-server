@@ -11,6 +11,9 @@ use SilverStripe\ORM\ValidationException;
  */
 class ClientEntityTest extends SapphireTest
 {
+    /**
+     * @var mixed
+     */
     protected $usesDatabase = true;
 
     public function testRedirectUriRequired(): void

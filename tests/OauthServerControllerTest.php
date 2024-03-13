@@ -33,7 +33,7 @@ class OauthServerControllerTest extends FunctionalTest
     use CryptTrait;
 
     /**
-     * @var string
+     * @var string|string[]
      */
     protected static $fixture_file = 'OauthServerControllerTest.yml';
 
@@ -134,11 +134,15 @@ class OauthServerControllerTest extends FunctionalTest
         $this->assertSame($query['state'], $state);
 
         // Have a look inside payload too.
-        $payload        = json_decode((string)$this->decrypt($query['code']), true, 512, JSON_THROW_ON_ERROR);
-        $authCodeEntity = AuthCodeEntity::get()->filter('Code', $payload['auth_code_id'])->first();
+        $payload = json_decode((string) $this->decrypt($query['code']), true, 512, JSON_THROW_ON_ERROR);
+
         $this->assertSame($payload['client_id'], $c->ClientIdentifier);
         $this->assertSame($payload['user_id'], $m->ID);
-        $this->assertNotNull($authCodeEntity);
+        $this->assertNotEmpty($payload['auth_code_id']);
+
+        /** @var AuthCodeEntity|null $authCodeEntity */
+        $authCodeEntity = AuthCodeEntity::get()->filter('Code', $payload['auth_code_id'])->first();
+        $this->assertInstanceOf(AuthCodeEntity::class, $authCodeEntity);
     }
 
     /**

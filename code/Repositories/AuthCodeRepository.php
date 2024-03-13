@@ -13,10 +13,7 @@ use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 
 class AuthCodeRepository implements AuthCodeRepositoryInterface
 {
-    /**
-     * @return AuthCodeEntity|null
-     */
-    public function getAuthCode($codeId)
+    public function getAuthCode(string $codeId): ?AuthCodeEntity
     {
         $codes = AuthCodeEntity::get()->filter([
             'Code' => $codeId,
@@ -26,20 +23,17 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
         return $codes->first();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCode): void
     {
-        /** @var AuthCodeEntity $authCodeEntity */
-        $authCodeEntity       = $authCode;
+        if (!$authCode instanceof AuthCodeEntity) {
+            return;
+        }
+
+        $authCodeEntity = $authCode;
         $authCodeEntity->Code = $authCodeEntity->getIdentifier();
         $authCodeEntity->write();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function revokeAuthCode($codeId): void
     {
         // Some logic to revoke the auth code in a database
