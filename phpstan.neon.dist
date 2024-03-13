@@ -1,10 +1,22 @@
 includes:
-    - phpstan-baseline.neon
+    - vendor/syntro/silverstripe-phpstan/phpstan.neon
 parameters:
     level: 8
     paths:
         - code
         - tests
+    stubFiles:
+        - stubs/GuzzleHttp/Psr7/Response.stub
+        - stubs/GuzzleHttp/Psr7/ServerRequest.stub
+        - stubs/Psr/Http/Message/MessageInterface.stub
+        - stubs/Psr/Http/Message/RequestInterface.stub
+        - stubs/Psr/Http/Message/ResponseInterface.stub
+        - stubs/Psr/Http/Message/ServerRequestInterface.stub
+        - stubs/Robbie/Psr7/AbstractHttpAdapter.stub
+        - stubs/Robbie/Psr7/HttpRequestAdapter.stub
+        - stubs/Robbie/Psr7/HttpResponseAdapter.stub
+        - stubs/SilverStripe/Control/HTTPRequest.stub
+        - stubs/SilverStripe/Control/HTTPResponse.stub
     ignoreErrors:
         # Ignore configurable properties
         - '#Static property .* is never read, only written#'

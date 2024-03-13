@@ -1,0 +1,22 @@
+<?php
+
+namespace Robbie\Psr7;
+
+/**
+ * @package psr7-adapters
+ */
+class HttpRequestAdapter extends \Robbie\Psr7\AbstractHttpAdapter
+{
+    /**
+     * @return \GuzzleHttp\Psr7\ServerRequest
+     */
+    public function toPsr7($input)
+    {
+    }
+    /**
+     * @return \SilverStripe\Control\HTTPRequest
+     */
+    public function fromPsr7($input)
+    {
+    }
+}

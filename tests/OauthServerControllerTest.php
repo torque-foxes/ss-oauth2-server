@@ -3,6 +3,8 @@
 namespace IanSimpson\Tests;
 
 use DateTimeImmutable;
+use Exception;
+use JsonException;
 use GuzzleHttp\Psr7\Query;
 use IanSimpson\OAuth2\Entities\AccessTokenEntity;
 use IanSimpson\OAuth2\Entities\AuthCodeEntity;
@@ -13,7 +15,6 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Validation\Constraint\IdentifiedBy;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
-use Lcobucci\JWT\Validation\Constraint\RelatedTo;
 use League\OAuth2\Server\CryptTrait;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,7 +24,6 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Member;
-use Exception;
 
 /**
  * @internal
@@ -66,16 +66,11 @@ class OauthServerControllerTest extends FunctionalTest
         Environment::putEnv('OAUTH_PRIVATE_KEY_PATH=' . $privateKey);
         Environment::putEnv('OAUTH_ENCRYPTION_KEY=' . $encryptionKey);
 
-        $privateKeyContent = (string) file_get_contents($privateKey);
-        if (!$privateKeyContent) {
-            throw new Exception('Unable to read private key content');
-        }
-
         $this->setEncryptionKey($encryptionKey);
 
         $this->configuration = Configuration::forSymmetricSigner(
             new Sha256(),
-            InMemory::plainTextContent($privateKeyContent)
+            InMemory::file($privateKey)
         );
 
         chmod($publicKey, 0600);
@@ -96,7 +91,7 @@ class OauthServerControllerTest extends FunctionalTest
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function testAuthorize(): void
     {
@@ -147,7 +142,7 @@ class OauthServerControllerTest extends FunctionalTest
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function testAccessToken(): void
     {
@@ -185,19 +180,22 @@ class OauthServerControllerTest extends FunctionalTest
             'redirect_uri'  => $redir,
         ]);
 
+        /** @var AccessTokenEntity|null */
         $at = AccessTokenEntity::get()->last();
 
+        $this->assertInstanceOf(AccessTokenEntity::class, $at);
         $this->assertSame(200, $resp->getStatusCode());
 
         $payload = json_decode($resp->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertIsInt($payload['expires_in']);
         $this->assertIsString($payload['access_token']);
+        $this->assertNotEmpty($at->Code);
+        $this->assertNotEmpty($c->ClientIdentifier);
 
         $constraints = [
             new IdentifiedBy($at->Code),
             new PermittedFor($c->ClientIdentifier),
-            new RelatedTo(''),
         ];
 
         $this->assertIsArray($payload);
@@ -209,21 +207,24 @@ class OauthServerControllerTest extends FunctionalTest
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testAuthenticateRequest(): void
     {
         /** @var ClientEntity $c */
-        $c  = $this->objFromFixture(ClientEntity::class, 'test');
+        $c = $this->objFromFixture(ClientEntity::class, 'test');
 
         /** @var Member $m */
-        $m  = $this->objFromFixture(Member::class, 'joe');
+        $m = $this->objFromFixture(Member::class, 'joe');
 
         /** @var AccessTokenEntity $at */
         $at = $this->objFromFixture(AccessTokenEntity::class, 'test');
 
         $now    = new DateTimeImmutable();
         $expiry = new DateTimeImmutable($at->Expiry);
+
+        $this->assertNotEmpty($at->Code);
+        $this->assertNotEmpty($c->ClientIdentifier);
 
         $jwt = $this->configuration->builder()
             ->permittedFor($c->ClientIdentifier)
