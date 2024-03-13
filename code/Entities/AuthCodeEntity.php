@@ -78,12 +78,12 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
 
     public function getExpiryDateTime(): DateTimeImmutable
     {
-        return (new DateTimeImmutable())->setTimestamp((int) $this->Expiry);
+        return (new DateTimeImmutable())->setTimestamp($this->Expiry);
     }
 
     public function getUserIdentifier(): int
     {
-        return (int) $this->MemberID;
+        return $this->MemberID;
     }
 
     public function getScopes(): array
@@ -91,13 +91,12 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this->ScopeEntities()->toArray();
     }
 
-    public function getClient(): null|ClientEntity|DataObject
+    /**
+     * @return ClientEntity
+     */
+    public function getClient(): ClientEntityInterface
     {
-        $clients = ClientEntity::get()->filter([
-            'ID' => $this->ClientID,
-        ]);
-
-        return $clients->first();
+        return $this->Client();
     }
 
     public function setIdentifier(mixed $code): self
@@ -121,13 +120,11 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this;
     }
 
-    /**
-     * @throws Exception
-     */
     public function addScope(ScopeEntityInterface $scope): self
     {
-        assert($scope instanceof ScopeEntity);
-        $this->ScopeEntities()->add($scope);
+        if ($scope instanceof ScopeEntity) {
+            $this->ScopeEntities()->add($scope);
+        }
 
         return $this;
     }
@@ -138,6 +135,7 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
     public function setScopes($scopes): self
     {
         $this->ScopeEntities()->removeAll();
+
         foreach ($scopes as $scope) {
             $this->addScope($scope);
         }
@@ -145,12 +143,11 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
         return $this;
     }
 
-    /**
-     * @param ClientEntity $client
-     */
     public function setClient(ClientEntityInterface $client): self
     {
-        $this->ClientID = $client->ID;
+        if ($client instanceof ClientEntity) {
+            $this->ClientID = $client->ID;
+        }
 
         return $this;
     }

@@ -13,10 +13,7 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {
-    /**
-     * @return RefreshTokenEntity|null
-     */
-    public function getRefreshToken($tokenId)
+    public function getRefreshToken(string $tokenId): ?RefreshTokenEntity
     {
         $clients = RefreshTokenEntity::get()->filter([
             'Code' => $tokenId,
@@ -26,24 +23,21 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         return $clients->first();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshToken): void
     {
-        /** @var RefreshTokenEntity $refreshTokenEntity */
-        $refreshTokenEntity       = $refreshToken;
+        if (!$refreshToken instanceof RefreshTokenEntity) {
+            return;
+        }
+
+        $refreshTokenEntity = $refreshToken;
         $refreshTokenEntity->Code = $refreshTokenEntity->getIdentifier();
         $refreshTokenEntity->write();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function revokeRefreshToken($tokenId): void
     {
         // Some logic to revoke the refresh token in a database
-        $token          = $this->getRefreshToken((string) $tokenId);
+        $token = $this->getRefreshToken((string) $tokenId);
 
         if (!$token instanceof RefreshTokenEntity) {
             return;
@@ -53,12 +47,9 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         $token->write();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isRefreshTokenRevoked($tokenId): bool
     {
-        $token = $this->getRefreshToken((string) $tokenId);
+        $token = $this->getRefreshToken($tokenId);
 
         if (!$token instanceof RefreshTokenEntity) {
             return true;
@@ -68,9 +59,9 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return RefreshTokenEntity
      */
-    public function getNewRefreshToken(): RefreshTokenEntity
+    public function getNewRefreshToken(): RefreshTokenEntityInterface
     {
         return RefreshTokenEntity::create();
     }

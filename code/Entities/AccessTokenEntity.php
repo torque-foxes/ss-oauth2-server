@@ -23,7 +23,7 @@ use SilverStripe\Security\Member;
 
 /**
  * @property ?string $Code
- * @property int $Expiry
+ * @property string $Expiry
  * @property bool $Revoked
  * @property int $ClientID
  * @property int $MemberID
@@ -88,7 +88,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 
     public function getUserIdentifier(): string
     {
-        return (string) $this->Client()->MemberID;
+        return (string) $this->MemberID;
     }
 
     public function getScopes(): array
@@ -97,16 +97,11 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
     }
 
     /**
-     * @return ClientEntity|null
+     * @return ClientEntity
      */
-    public function getClient()
+    public function getClient(): ClientEntityInterface
     {
-        $clients = ClientEntity::get()->filter([
-            'ID' => $this->ClientID,
-        ]);
-
-        /** @var ClientEntity|null */
-        return $clients->first();
+        return $this->Client();
     }
 
     public function setIdentifier(mixed $code): self
@@ -118,7 +113,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 
     public function setExpiryDateTime(DateTimeImmutable $expiry): self
     {
-        $this->Expiry = $expiry->getTimestamp();
+        $this->Expiry = (string) $expiry->getTimestamp();
 
         return $this;
     }
@@ -130,12 +125,11 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this;
     }
 
-    /**
-     * @param ScopeEntity $scope
-     */
     public function addScope(ScopeEntityInterface $scope): self
     {
-        $this->ScopeEntities()->add($scope);
+        if ($scope instanceof ScopeEntity) {
+            $this->ScopeEntities()->add($scope);
+        }
 
         return $this;
     }
@@ -145,7 +139,8 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
      */
     public function setScopes($scopes): self
     {
-        $this->ScopeEntities()->removeall();
+        $this->ScopeEntities()->removeAll();
+
         foreach ($scopes as $scope) {
             $this->addScope($scope);
         }
@@ -153,12 +148,11 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         return $this;
     }
 
-    /**
-     * @param ClientEntity $client
-     */
     public function setClient(ClientEntityInterface $client): self
     {
-        $this->ClientID = $client->ID;
+        if ($client instanceof ClientEntity) {
+            $this->ClientID = $client->ID;
+        }
 
         return $this;
     }

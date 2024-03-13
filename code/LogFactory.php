@@ -11,8 +11,8 @@ use SilverStripe\Core\Injector\Factory;
 class LogFactory implements Factory
 {
     /**
-     * @param mixed $service
-     * @param array<string[]> $params
+     * @param string $service
+     * @param string[] $params
      */
     public function create($service, array $params = []): Logger
     {

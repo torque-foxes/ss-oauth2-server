@@ -15,12 +15,12 @@ abstract class AbstractHttpAdapter
      * @param  \SilverStripe\Control\HTTPRequest|\SilverStripe\Control\HTTPResponse $input
      * @return \Psr\Http\Message\MessageInterface
      */
-    public abstract function toPsr7($input);
+    abstract public function toPsr7($input);
     /**
      * Perform a conversion from a PSR-7 interface to the corresponding HTTPRequest or HTTPResponse class
      *
      * @param  \Psr\Http\Message\MessageInterface $input
      * @return \SilverStripe\Control\HTTPRequest|\SilverStripe\Control\HTTPResponse
      */
-    public abstract function fromPsr7($input);
+    abstract public function fromPsr7($input);
 }

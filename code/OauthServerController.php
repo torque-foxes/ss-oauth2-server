@@ -110,16 +110,21 @@ class OauthServerController extends Controller
      */
     public function __construct()
     {
+        if (!self::hasKey('OAUTH_PRIVATE_KEY_PATH')) {
+            throw new Exception('OauthServerController::$privateKey must not be empty!');
+        }
+
+        if (!self::hasKey('OAUTH_PUBLIC_KEY_PATH')) {
+            throw new Exception('OauthServerController::$publicKey must not be empty!');
+        }
+
+        if (!self::hasKey('OAUTH_ENCRYPTION_KEY')) {
+            throw new Exception('OauthServerController::$encryptionKey must not be empty!');
+        }
+
         $this->privateKey = self::getKey('OAUTH_PRIVATE_KEY_PATH');
         $this->publicKey  = self::getKey('OAUTH_PUBLIC_KEY_PATH');
-
-        if (!$this->privateKey) {
-            throw new Exception('OauthServerController::privateKey must not be empty!');
-        }
-
-        if (!$this->publicKey) {
-            throw new Exception('OauthServerController::publicKey must not be empty!');
-        }
+        $this->encryptionKey = self::getKey('OAUTH_ENCRYPTION_KEY');
 
         $this->myRepositories = [
             'client'        => new ClientRepository(),
@@ -128,11 +133,6 @@ class OauthServerController extends Controller
             'authCode'      => new AuthCodeRepository(),
             'refreshToken'  => new RefreshTokenRepository(),
         ];
-
-        $this->encryptionKey = self::getKey('OAUTH_ENCRYPTION_KEY');
-        if (empty($this->encryptionKey)) {
-            throw new Exception('OauthServerController::encryptionKey must not be empty!');
-        }
 
         // Will fail ungracefully if key(s) permissions are not set to 0600|0660
         $this->server = new AuthorizationServer(
@@ -345,5 +345,10 @@ class OauthServerController extends Controller
     private static function getKey(string $key): string
     {
         return Environment::getEnv($key);
+    }
+
+    private static function hasKey(string $key): bool
+    {
+        return Environment::hasEnv($key) && Environment::getEnv($key) !== '';
     }
 }

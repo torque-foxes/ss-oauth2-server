@@ -9,6 +9,7 @@ namespace IanSimpson\OAuth2\Repositories;
 
 use IanSimpson\OAuth2\Entities\ScopeEntity;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 
 class ScopeRepository implements ScopeRepositoryInterface
@@ -16,7 +17,7 @@ class ScopeRepository implements ScopeRepositoryInterface
     /**
      * @return ScopeEntity|null
      */
-    public function getScopeEntityByIdentifier($scopeIdentifier)
+    public function getScopeEntityByIdentifier($scopeIdentifier): ?ScopeEntityInterface
     {
         $scopes = ScopeEntity::get()->filter([
             'ScopeIdentifier' => $scopeIdentifier,
@@ -26,10 +27,6 @@ class ScopeRepository implements ScopeRepositoryInterface
         return $scopes->first();
     }
 
-    /**
-     * @param ScopeEntity[] $scopes
-     * @return ScopeEntity[]
-     */
     public function finalizeScopes(
         array $scopes,
         $grantType,

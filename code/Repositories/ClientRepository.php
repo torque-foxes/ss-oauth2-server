@@ -8,26 +8,24 @@
 namespace IanSimpson\OAuth2\Repositories;
 
 use IanSimpson\OAuth2\Entities\ClientEntity;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 class ClientRepository implements ClientRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getClientEntity($clientIdentifier): ?ClientEntity
+    public function getClientEntity($clientIdentifier): ?ClientEntityInterface
     {
         $clients = ClientEntity::get()->filter([
             'ClientIdentifier' => $clientIdentifier,
         ]);
 
-        // Check if client is registered
-        if (!$clients->exists()) {
+        /** @var ClientEntity|null $client */
+        $client = $clients->first();
+
+        if (!$client instanceof ClientEntity) {
             return null;
         }
 
-        /** @var ClientEntity $client */
-        $client = $clients->first();
         $client->setConfidential();
 
         return $client;
