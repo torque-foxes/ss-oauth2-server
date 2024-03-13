@@ -42,7 +42,7 @@ class ClientRepository implements ClientRepositoryInterface
 
         if (
             $client instanceof ClientEntity && $client->ClientConfidential
-                                            && $client->isSecretValid($clientSecret)
+                                            && $client->isSecretValid((string) $clientSecret)
         ) {
             return true;
         }
