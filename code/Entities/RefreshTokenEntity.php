@@ -16,7 +16,7 @@ use SilverStripe\ORM\DataObject;
 
 /**
  * @property ?string $Code
- * @property string $Expiry
+ * @property int $Expiry
  * @property bool $Revoked
  * @property int $AccessTokenID
  * @method AccessTokenEntity AccessToken()
@@ -56,10 +56,7 @@ class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterfa
 
     public function getExpiryDateTime(): DateTimeImmutable
     {
-        $date = new DateTimeImmutable();
-        $date->setTimestamp((int) $this->Expiry);
-
-        return $date;
+        return (new DateTimeImmutable())->setTimestamp((int) $this->Expiry);
     }
 
     /**
