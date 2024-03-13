@@ -64,7 +64,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
 
     /**
      * @config
-     * @var array|string[]
+     * @var array<string, array<string, array<int, string>|string>>
      */
     private static array $indexes = [
         'ScopeIdentifier' => [
