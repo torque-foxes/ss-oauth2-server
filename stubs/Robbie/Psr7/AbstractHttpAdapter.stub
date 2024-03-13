@@ -1,0 +1,26 @@
+<?php
+
+namespace Robbie\Psr7;
+
+/**
+ * Provides common functionality used between Request and Response objects
+ *
+ * @package psr7-adapters
+ */
+abstract class AbstractHttpAdapter
+{
+    /**
+     * Perform a conversion from a HTTPResponse or HTTPRequest into the corresponding PSR-7 interface
+     *
+     * @param  \SilverStripe\Control\HTTPRequest|\SilverStripe\Control\HTTPResponse $input
+     * @return \Psr\Http\Message\MessageInterface
+     */
+    public abstract function toPsr7($input);
+    /**
+     * Perform a conversion from a PSR-7 interface to the corresponding HTTPRequest or HTTPResponse class
+     *
+     * @param  \Psr\Http\Message\MessageInterface $input
+     * @return \SilverStripe\Control\HTTPRequest|\SilverStripe\Control\HTTPResponse
+     */
+    public abstract function fromPsr7($input);
+}

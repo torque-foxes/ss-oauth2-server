@@ -1,0 +1,7 @@
+<?php
+
+namespace GuzzleHttp\Psr7;
+
+class Response implements \Psr\Http\Message\ResponseInterface
+{
+}

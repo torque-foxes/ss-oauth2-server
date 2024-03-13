@@ -7,27 +7,28 @@
 
 namespace IanSimpson\OAuth2;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use DateInterval;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Utils;
 use IanSimpson\OAuth2\Entities\UserEntity;
 use IanSimpson\OAuth2\Entities\ClientEntity;
+use IanSimpson\OAuth2\Entities\ScopeEntity;
 use IanSimpson\OAuth2\Repositories\AccessTokenRepository;
 use IanSimpson\OAuth2\Repositories\AuthCodeRepository;
 use IanSimpson\OAuth2\Repositories\ClientRepository;
 use IanSimpson\OAuth2\Repositories\RefreshTokenRepository;
 use IanSimpson\OAuth2\Repositories\ScopeRepository;
 use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResourceServer;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Robbie\Psr7\HttpRequestAdapter;
 use Robbie\Psr7\HttpResponseAdapter;
 use SilverStripe\Control\Controller;
@@ -39,19 +40,22 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
-use Throwable;
 
 class OauthServerController extends Controller
 {
     /**
      * @var string default is 1 hour
+     * @config
      */
     public static string $grant_expiry_interval = 'PT1H';
 
+    /**
+     * @var AuthorizationServer
+     */
     protected $server;
 
     /**
-     * @var RequestInterface
+     * @var ServerRequestInterface
      */
     protected $myRequest;
 
@@ -65,15 +69,14 @@ class OauthServerController extends Controller
      */
     protected $logger;
 
-    private string $privateKey;
+    private readonly string $privateKey;
 
-    private string $publicKey;
+    private readonly string $publicKey;
 
-    private string $encryptionKey;
+    private readonly string $encryptionKey;
 
     /**
-     *
-     * @var array|string[]
+     * @var string[]
      * @config
      */
     private static array $allowed_actions = [
@@ -83,8 +86,7 @@ class OauthServerController extends Controller
     ];
 
     /**
-     *
-     * @var array|string[]
+     * @var string[]
      * @config
      */
     private static array $url_handlers = [
@@ -94,9 +96,9 @@ class OauthServerController extends Controller
         'validate'          => 'validateClientGrant',
     ];
 
-    private ?HttpRequestAdapter $myRequestAdapter = null;
+    private HttpRequestAdapter $myRequestAdapter;
 
-    private ?HttpResponseAdapter $myResponseAdapter = null;
+    private HttpResponseAdapter $myResponseAdapter;
 
     /**
      * @var array{client: ClientRepository, scope: ScopeRepository, accessToken: AccessTokenRepository, authCode: AuthCodeRepository, refreshToken: RefreshTokenRepository}
@@ -169,7 +171,13 @@ class OauthServerController extends Controller
             $grant,
             new DateInterval(self::getGrantTypeExpiryInterval())
         );
-        $this->logger = Injector::inst()->get('IanSimpson\\OAuth2\\Logger');
+
+        // Setup logger
+        $this->logger = Injector::inst()->get('IanSimpson\\OAuth2\\Logger'); // @phpstan-ignore-line
+
+        // Setup adapters, these will be reset on handleRequest()
+        $this->myRequestAdapter = new HttpRequestAdapter();
+        $this->myRequestAdapter = new HttpRequestAdapter();
 
         parent::__construct();
     }
@@ -197,8 +205,8 @@ class OauthServerController extends Controller
             $authRequest = $this->server->validateAuthorizationRequest($this->myRequest);
 
             /** @var ClientEntity $client */
-            $client      = $authRequest->getClient();
-            $member      = Security::getCurrentUser();
+            $client = $authRequest->getClient();
+            $member = Security::getCurrentUser();
 
             // The auth request object can be serialized and saved into a user's session.
             if (!$member instanceof Member || !$member->exists()) {
@@ -234,7 +242,11 @@ class OauthServerController extends Controller
                 $member->Email,
                 $client->ClientName,
                 $client->ClientIdentifier,
-                implode(', ', array_map(function ($entity) {
+                implode(', ', array_map(static function (ScopeEntityInterface $entity): mixed {
+                    if (!$entity instanceof ScopeEntity) {
+                        return null;
+                    }
+
                     return $entity->ScopeIdentifier;
                 }, $authRequest->getScopes()))
             ));
@@ -250,7 +262,6 @@ class OauthServerController extends Controller
             );
         }
 
-        /** @var HTTPResponse */
         return $this->myResponseAdapter->fromPsr7($this->myResponse);
     }
 
@@ -262,13 +273,8 @@ class OauthServerController extends Controller
         } catch (OAuthServerException $exception) {
             // All instances of OAuthServerException can be formatted into a HTTP response
             $this->myResponse = $exception->generateHttpResponse($this->myResponse);
-        } catch (Exception $exception) {
-            $this->myResponse = $this->myResponse->withStatus(500)->withBody(
-                Utils::streamFor($exception->getMessage())
-            );
-        }
+        };
 
-        /** @var HTTPResponse */
         return $this->myResponseAdapter->fromPsr7($this->myResponse);
     }
 
@@ -292,7 +298,7 @@ class OauthServerController extends Controller
 
         try {
             $request = $server->validateAuthenticatedRequest($request);
-        } catch (Throwable) {
+        } catch (OAuthServerException) {
             return null;
         }
 
@@ -318,44 +324,19 @@ class OauthServerController extends Controller
         return $members->first();
     }
 
-    public function getServer(): AuthorizationServer|ResourceServer
-    {
-        return $this->server;
-    }
-
-    public function setServer(ResourceServer|AuthorizationServer $server): self
-    {
-        $this->server = $server;
-
-        return $this;
-    }
-
-    public function validateClientGrant(HTTPRequest $request): HTTPResponse|bool
+    public function validateClientGrant(HTTPRequest $request): bool
     {
         $server = new ResourceServer(
             new AccessTokenRepository(),
             $this->publicKey
         );
 
-        $this->setServer($server);
         $this->handleRequest($request);
 
         try {
-            // Try to respond to the request
-            $this->myResponse = $this->server->validateAuthenticatedRequest($this->myRequest);
-        } catch (OAuthServerException $exception) {
-            // All instances of OAuthServerException can be formatted into a HTTP response
-            $this->myResponse = $exception->generateHttpResponse($this->myResponse);
-
-            /** @var HTTPResponse */
-            return $this->myResponseAdapter->fromPsr7($this->myResponse);
-        } catch (Exception $exception) {
-            $this->myResponse = $this->myResponse->withStatus(500)->withBody(
-                Utils::streamFor($exception->getMessage())
-            );
-
-            /** @var HTTPResponse */
-            return $this->myResponseAdapter->fromPsr7($this->myResponse);
+            $server->validateAuthenticatedRequest($this->myRequest);
+        } catch (OAuthServerException) {
+            return false;
         }
 
         return true;

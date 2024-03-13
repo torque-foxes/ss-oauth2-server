@@ -1,0 +1,7 @@
+<?php
+
+namespace GuzzleHttp\Psr7;
+
+class ServerRequest implements \Psr\Http\Message\ServerRequestInterface
+{
+}
