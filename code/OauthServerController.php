@@ -9,6 +9,7 @@ namespace IanSimpson\OAuth2;
 
 use DateInterval;
 use Exception;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Utils;
 use IanSimpson\OAuth2\Entities\UserEntity;
@@ -336,7 +337,7 @@ class OauthServerController extends Controller
         try {
             $server->validateAuthenticatedRequest($this->myRequest);
         } catch (OAuthServerException $e) {
-            return new HTTPResponse($e->getMessage(), $e->getHttpStatusCode());
+            return $this->myResponseAdapter->fromPsr7($e->generateHttpResponse(new Response()));
         }
 
         return new HTTPResponse('', 200);
