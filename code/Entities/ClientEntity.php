@@ -99,7 +99,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
     /**
      * @config
      *
-     * @var array<string, array<string, array<int, string>|string>>
+     * @var array<string, array{type: string, columns: array<string>}>
      */
     private static array $indexes = [
         'ClientIdentifier' => [

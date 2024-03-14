@@ -38,7 +38,7 @@ Put these on your web server, somewhere outside the web root
 Generate encryption key:
 
 ```sh
-php -r 'echo base64_encode(random_bytes(32)), PHP_EOL;'
+php -r 'echo base64_encode(random_bytes(36)), PHP_EOL;'
 ```
 
 Add the following lines in your `.env`, updating the `OAUTH_PRIVATE_KEY_PATH` and `OAUTH_PUBLIC_KEY_PATH` to point to the key files, and adding the encryption key you have just generated:

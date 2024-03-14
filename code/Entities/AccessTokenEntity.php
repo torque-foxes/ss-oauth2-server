@@ -23,7 +23,7 @@ use SilverStripe\Security\Member;
 
 /**
  * @property ?string $Code
- * @property string $Expiry
+ * @property int $Expiry
  * @property bool $Revoked
  * @property int $ClientID
  * @property int $MemberID
@@ -61,6 +61,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
      */
     private static array $has_one = [
         'Client' => ClientEntity::class,
+        'Member' => Member::class,
     ];
 
 
@@ -113,7 +114,7 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
 
     public function setExpiryDateTime(DateTimeImmutable $expiry): self
     {
-        $this->Expiry = (string) $expiry->getTimestamp();
+        $this->Expiry = $expiry->getTimestamp();
 
         return $this;
     }
