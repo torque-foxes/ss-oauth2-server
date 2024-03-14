@@ -324,7 +324,7 @@ class OauthServerController extends Controller
         return $members->first();
     }
 
-    public function validateClientGrant(HTTPRequest $request): bool
+    public function validateClientGrant(HTTPRequest $request): HTTPResponse
     {
         $server = new ResourceServer(
             new AccessTokenRepository(),
@@ -335,11 +335,11 @@ class OauthServerController extends Controller
 
         try {
             $server->validateAuthenticatedRequest($this->myRequest);
-        } catch (OAuthServerException) {
-            return false;
+        } catch (OAuthServerException $e) {
+            return new HTTPResponse($e->getMessage(), $e->getHttpStatusCode());
         }
 
-        return true;
+        return new HTTPResponse('', 200);
     }
 
     private static function getKey(string $key): string

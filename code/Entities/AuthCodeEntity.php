@@ -8,7 +8,6 @@
 namespace IanSimpson\OAuth2\Entities;
 
 use DateTimeImmutable;
-use Exception;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -21,10 +20,10 @@ use SilverStripe\Security\Member;
 
 /**
  * @property ?string $Code
- * @property int     $Expiry
- * @property bool    $Revoked
- * @property int     $ClientID
- * @property int     $MemberID
+ * @property int $Expiry
+ * @property bool $Revoked
+ * @property int $ClientID
+ * @property int $MemberID
  *
  * @method ClientEntity               Client()
  * @method Member                     Member()
@@ -78,7 +77,7 @@ class AuthCodeEntity extends DataObject implements AuthCodeEntityInterface
 
     public function getExpiryDateTime(): DateTimeImmutable
     {
-        return (new DateTimeImmutable())->setTimestamp($this->Expiry);
+        return (new DateTimeImmutable())->setTimestamp((int) $this->Expiry);
     }
 
     public function getUserIdentifier(): int
