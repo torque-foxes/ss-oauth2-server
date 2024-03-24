@@ -17,13 +17,14 @@ use SilverStripe\ORM\HasManyList;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
- * @method HasManyList|ClientEntity[] Clients()
+ * @method ClientEntity[]|HasManyList Clients()
  * @method SiteConfig&static getOwner()
  */
 class ClientAdmin extends DataExtension
 {
     /**
      * @var array|string[]
+     *
      * @config
      */
     private static array $has_many = [
@@ -33,7 +34,7 @@ class ClientAdmin extends DataExtension
     public function updateCMSFields(FieldList $fields): void
     {
         $gridFieldConfig = GridFieldConfig::create();
-        $button          = GridFieldAddNewButton::create('toolbar-header-right');
+        $button = GridFieldAddNewButton::create('toolbar-header-right');
         $button->setButtonName('Add New OAuth Client');
         $gridFieldConfig->addComponents(
             GridFieldToolbarHeader::create(),
@@ -44,14 +45,11 @@ class ClientAdmin extends DataExtension
             GridFieldDetailForm::create()
         );
 
-        $fields->addFieldToTab(
-            'Root.OAuthConfiguration',
-            GridField::create(
-                'Clients',
-                'Clients',
-                $this->getOwner()->Clients(),
-                $gridFieldConfig
-            )
-        );
+        $fields->addFieldToTab('Root.OAuth.Configuration', GridField::create(
+            'Clients',
+            'Clients',
+            $this->getOwner()->Clients(),
+            $gridFieldConfig
+        ));
     }
 }

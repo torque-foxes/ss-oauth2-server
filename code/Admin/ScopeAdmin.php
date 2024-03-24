@@ -34,7 +34,7 @@ class ScopeAdmin extends DataExtension
     public function updateCMSFields(FieldList $fields): void
     {
         $gridFieldConfig = GridFieldConfig::create();
-        $button          = GridFieldAddNewButton::create('toolbar-header-right');
+        $button = GridFieldAddNewButton::create('toolbar-header-right');
         $button->setButtonName('Add New OAuth Scope');
         $gridFieldConfig->addComponents(
             GridFieldToolbarHeader::create(),
@@ -45,14 +45,11 @@ class ScopeAdmin extends DataExtension
             GridFieldDetailForm::create()
         );
 
-        $fields->addFieldToTab(
-            'Root.OAuthConfiguration',
-            GridField::create(
-                'Scopes',
-                'Scopes',
-                $this->getOwner()->Scopes(),
-                $gridFieldConfig
-            )
-        );
+        $fields->addFieldToTab('Root.OAuth.Configuration', GridField::create(
+            'Scopes',
+            'Scopes',
+            $this->getOwner()->Scopes(),
+            $gridFieldConfig
+        ));
     }
 }

@@ -9,6 +9,7 @@ SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - IanSimpson\OAuth2\Admin\ClientAdmin
     - IanSimpson\OAuth2\Admin\ScopeAdmin
+    - IanSimpson\OAuth2\Admin\AccessTokenAdmin
 SilverStripe\Core\Injector\Injector:
   IanSimpson\OAuth2\Logger:
     factory: 'IanSimpson\OAuth2\LogFactory'
