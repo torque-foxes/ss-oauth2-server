@@ -46,6 +46,7 @@ class OauthServerController extends Controller
 {
     /**
      * @var string default is 1 hour
+     *
      * @config
      */
     public static string $grant_expiry_interval = 'PT1H';
@@ -78,6 +79,7 @@ class OauthServerController extends Controller
 
     /**
      * @var string[]
+     *
      * @config
      */
     private static array $allowed_actions = [
@@ -88,6 +90,7 @@ class OauthServerController extends Controller
 
     /**
      * @var string[]
+     *
      * @config
      */
     private static array $url_handlers = [
@@ -274,7 +277,7 @@ class OauthServerController extends Controller
         } catch (OAuthServerException $exception) {
             // All instances of OAuthServerException can be formatted into a HTTP response
             $this->myResponse = $exception->generateHttpResponse($this->myResponse);
-        };
+        }
 
         return $this->myResponseAdapter->fromPsr7($this->myResponse);
     }
@@ -321,7 +324,7 @@ class OauthServerController extends Controller
             'ID' => $request->getAttributes()['oauth_user_id'],
         ]);
 
-        /** @var Member */
+        // @var Member
         return $members->first();
     }
 

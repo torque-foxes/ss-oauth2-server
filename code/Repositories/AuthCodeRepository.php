@@ -19,7 +19,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
             'Code' => $codeId,
         ]);
 
-        /** @var AuthCodeEntity|null */
+        // @var AuthCodeEntity|null
         return $codes->first();
     }
 

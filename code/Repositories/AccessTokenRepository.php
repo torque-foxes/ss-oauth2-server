@@ -20,7 +20,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
             'Code' => $tokenId,
         ]);
 
-        /** @var AccessTokenEntity|null */
+        // @var AccessTokenEntity|null
         return $clients->first();
     }
 

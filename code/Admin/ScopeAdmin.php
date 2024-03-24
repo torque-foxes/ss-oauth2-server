@@ -24,6 +24,7 @@ class ScopeAdmin extends DataExtension
 {
     /**
      * @var array|string[]
+     *
      * @config
      */
     private static array $has_many = [

@@ -37,15 +37,14 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
     use TokenEntityTrait;
     use EntityTrait;
 
-
     /**
      * @config
      */
     private static string $table_name = 'OAuth_AccessTokenEntity';
 
-
     /**
      * @var array|string[]
+     *
      * @config
      */
     private static array $db = [
@@ -54,9 +53,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         'Revoked' => 'Boolean',
     ];
 
-
     /**
      * @var array|string[]
+     *
      * @config
      */
     private static array $has_one = [
@@ -64,9 +63,9 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         'Member' => Member::class,
     ];
 
-
     /**
      * @var array|string[]
+     *
      * @config
      */
     private static array $many_many = [

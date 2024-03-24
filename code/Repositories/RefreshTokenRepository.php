@@ -19,7 +19,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
             'Code' => $tokenId,
         ]);
 
-        /** @var RefreshTokenEntity|null */
+        // @var RefreshTokenEntity|null
         return $clients->first();
     }
 

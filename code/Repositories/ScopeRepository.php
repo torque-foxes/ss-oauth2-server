@@ -23,7 +23,7 @@ class ScopeRepository implements ScopeRepositoryInterface
             'ScopeIdentifier' => $scopeIdentifier,
         ]);
 
-        /** @var ScopeEntity|null */
+        // @var ScopeEntity|null
         return $scopes->first();
     }
 

@@ -39,6 +39,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
 
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $db = [
@@ -48,6 +49,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
 
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $has_one = [
@@ -56,6 +58,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
 
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $summary_fields = [
@@ -64,6 +67,7 @@ class ScopeEntity extends DataObject implements ScopeEntityInterface
 
     /**
      * @config
+     *
      * @var array<string, array<string, array<int, string>|string>>
      */
     private static array $indexes = [

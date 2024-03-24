@@ -33,6 +33,7 @@ class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterfa
 
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $db = [
@@ -43,6 +44,7 @@ class RefreshTokenEntity extends DataObject implements RefreshTokenEntityInterfa
 
     /**
      * @config
+     *
      * @var array|string[]
      */
     private static array $has_one = [
