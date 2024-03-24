@@ -38,13 +38,9 @@ class ClientRepository implements ClientRepositoryInterface
     {
         $client = $this->getClientEntity($clientIdentifier);
 
-        if (
-            $client instanceof ClientEntity && $client->ClientConfidential
-                                            && $client->isSecretValid((string) $clientSecret)
-        ) {
-            return true;
-        }
-
-        return false;
+        // Validate the client secret and grant type
+        return $client instanceof ClientEntity && $client->ClientConfidential
+                                               && $client->isSecretValid((string) $clientSecret)
+                                               && $grantType !== $client->ClientGrantType;
     }
 }

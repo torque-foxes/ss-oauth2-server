@@ -9,6 +9,7 @@ namespace IanSimpson\OAuth2\Entities;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\Traits\ClientTrait;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
@@ -26,6 +27,7 @@ use SilverStripe\SiteConfig\SiteConfig;
  * @property string  $ClientSecretHashMethod
  * @property string  $ClientSecretHashIterations
  * @property string  $ClientSecretSalt
+ * @property string  $ClientGrantType
  * @property bool    $ClientConfidential
  * @property int     $SiteConfigID
  *
@@ -65,6 +67,28 @@ class ClientEntity extends DataObject implements ClientEntityInterface
      *
      * @var array|string[]
      */
+    private static array $grant_types = [
+        'client_credentials' => 'client_credentials',
+        'authorization_code' => 'authorization_code',
+        'password' => 'password',
+        'refresh_token' => 'refresh_token'
+    ];
+
+    /**
+     * @config
+     *
+     * @var array<string, string|bool>
+     */
+    private static array $defaults = [
+        'ClientGrantType' => 'client_credentials',
+        'ClientConfidential' => true,
+    ];
+
+    /**
+     * @config
+     *
+     * @var array|string[]
+     */
     private static array $db = [
         'ClientName'                 => 'Varchar(100)',
         'ClientRedirectUri'          => 'Varchar(100)',
@@ -75,6 +99,7 @@ class ClientEntity extends DataObject implements ClientEntityInterface
         'ClientSecretHashIterations' => 'Varchar(50)',
         'ClientSecretSalt'           => 'Varchar(50)',
         'ClientConfidential'         => 'Boolean',
+        'ClientGrantType'            => 'Text',
     ];
 
     /**
@@ -140,6 +165,11 @@ class ClientEntity extends DataObject implements ClientEntityInterface
                 $fields->insertAfter('ClientIdentifier', $secretField);
             }
         }
+
+        $fields->addFieldToTab(
+            'Root.Main',
+            DropdownField::create('ClientGrantType', 'Grant Type', (array) self::config()->get('grant_types'))
+        );
 
         return $fields;
     }

@@ -14,6 +14,7 @@ IanSimpson\OAuth2\Entities\ClientEntity:
     ClientSecret: 789
     ClientRedirectUri: http://client/callback
     ClientConfidential: 1
+    ClientGrantType: authorization_code
 IanSimpson\OAuth2\Entities\ScopeEntity:
   test:
     ScopeIdentifier: read_profile

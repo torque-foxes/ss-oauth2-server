@@ -4,6 +4,7 @@ namespace IanSimpson\Tests;
 
 use IanSimpson\OAuth2\Entities\ClientEntity;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\ORM\ValidationException;
 
 /**
@@ -97,5 +98,18 @@ class ClientEntityTest extends SapphireTest
         $this->assertNull($secret);
         $legacyField = $e->getCMSFields()->fieldByName('Root.Main.LegacyClientSecret');
         $this->assertNotNull($legacyField);
+    }
+
+    public function testCMSFields(): void
+    {
+        $fields = ClientEntity::create()->getCMSFields();
+
+        $visibleFields = [
+            'ClientGrantType' => DropdownField::class,
+        ];
+
+        foreach ($visibleFields as $fieldName => $classType) {
+            $this->assertInstanceOf($classType, $fields->dataFieldByName($fieldName));
+        }
     }
 }

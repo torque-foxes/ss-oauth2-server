@@ -181,7 +181,6 @@ class OauthServerController extends Controller
 
         // Setup adapters, these will be reset on handleRequest()
         $this->myRequestAdapter = new HttpRequestAdapter();
-        $this->myRequestAdapter = new HttpRequestAdapter();
 
         parent::__construct();
     }
