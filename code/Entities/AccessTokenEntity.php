@@ -72,6 +72,16 @@ class AccessTokenEntity extends DataObject implements AccessTokenEntityInterface
         'ScopeEntities' => ScopeEntity::class,
     ];
 
+    /**
+     *
+     * @var string[]
+     *
+     * @config
+     */
+    private static array $searchable_fields = [
+        'Code',
+    ];
+
     public function getIdentifier(): string
     {
         return (string) $this->Code;
